@@ -1,283 +1,189 @@
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { FormEvent } from "react";
+import { toast } from "sonner";
+
 const Checkout = () => {
+    const onSubmit = (e: FormEvent<HTMLElement>)=>{
+        e.preventDefault()
+        toast.success('Payment Successful')
+    }
     return (
-        <section>
-            <div className="container py-50px lg:py-60px 2xl:py-20 3xl:py-100px">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-30px">
-                    {/* left */}
-                    <div>
-                        {/* heading */}
-                        <h4 className="text-xl text-blackColor dark:text-blackColor-dark font-bold pb-10px mb-5 border-b border-borderColor dark:border-borderColor-dark">
-                            <span className="leading-1.2">Billing Details</span>
-                        </h4>
-                        <form
-                            data-aos="fade-up"
-                            className="aos-init aos-animate"
-                        >
-                            <div className="grid grid-cols-1 xl:grid-cols-2 lg:gap-x-30px gap-y-5 mb-5">
-                                <div>
-                                    <label className="text-sm text-blackColor dark:text-blackColor-dark mb-5px block">
-                                        <span className="leading-1.8">
-                                            First Name *
-                                        </span>
-                                    </label>
-                                    <input
-                                        type="text"
-                                        placeholder="First Name"
-                                        className="w-full h-50px leading-50px px-5 bg-transparent text-sm focus:outline-none text-blackColor dark:text-blackColor-dark border border-borderColor dark:border-borderColor-dark placeholder:text-placeholder placeholder:opacity-80"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="text-sm text-blackColor dark:text-blackColor-dark mb-5px block">
-                                        <span className="leading-1.8">
-                                            Last Name*
-                                        </span>
-                                    </label>
-                                    <input
-                                        type="text"
-                                        placeholder="Last Name"
-                                        className="w-full h-50px leading-50px px-5 bg-transparent text-sm focus:outline-none text-blackColor dark:text-blackColor-dark border border-borderColor dark:border-borderColor-dark placeholder:text-placeholder placeholder:opacity-80"
-                                    />
-                                </div>
-                            </div>
-                            <div className="mb-5">
-                                <label className="text-sm text-blackColor dark:text-blackColor-dark mb-5px block">
-                                    <span className="leading-1.8">
-                                        Company Name
-                                    </span>
-                                </label>
-                                <input
-                                    type="text"
-                                    placeholder="Company Name"
-                                    className="w-full h-50px leading-50px px-5 bg-transparent text-sm focus:outline-none text-blackColor dark:text-blackColor-dark border border-borderColor dark:border-borderColor-dark placeholder:text-placeholder placeholder:opacity-80"
-                                />
-                            </div>
-                            <div className="grid grid-cols-1 xl:grid-cols-2 lg:gap-x-30px gap-y-5 mb-5">
-                                <div>
-                                    <label className="text-sm text-blackColor dark:text-blackColor-dark mb-5px block">
-                                        <span className="leading-1.8">
-                                            Email Address*
-                                        </span>
-                                    </label>
-                                    <input
-                                        type="email"
-                                        placeholder="Your email"
-                                        className="w-full h-50px leading-50px px-5 bg-transparent text-sm focus:outline-none text-blackColor dark:text-blackColor-dark border border-borderColor dark:border-borderColor-dark placeholder:text-placeholder placeholder:opacity-80"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="text-sm text-blackColor dark:text-blackColor-dark mb-5px block">
-                                        <span className="leading-1.8">
-                                            Phone Number*
-                                        </span>
-                                    </label>
-                                    <input
-                                        type="text"
-                                        placeholder="Phone Number"
-                                        className="w-full h-50px leading-50px px-5 bg-transparent text-sm focus:outline-none text-blackColor dark:text-blackColor-dark border border-borderColor dark:border-borderColor-dark placeholder:text-placeholder placeholder:opacity-80"
-                                    />
-                                </div>
-                            </div>
-                            <div className="grid grid-cols-1 gap-y-5 mb-5">
-                                <div>
-                                    <label className="text-sm text-blackColor dark:text-blackColor-dark mb-5px block">
-                                        <span className="leading-1.8">
-                                            Address *
-                                        </span>
-                                    </label>
-                                    <input
-                                        type="text"
-                                        placeholder="Address"
-                                        className="w-full h-50px leading-50px px-5 bg-transparent text-sm focus:outline-none text-blackColor dark:text-blackColor-dark border border-borderColor dark:border-borderColor-dark placeholder:text-placeholder placeholder:opacity-80"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="text-sm text-blackColor dark:text-blackColor-dark mb-5px block">
-                                        <span className="leading-1.8">
-                                            Town/City *
-                                        </span>
-                                    </label>
-                                    <input
-                                        type="text"
-                                        placeholder="Town/City"
-                                        className="w-full h-50px leading-50px px-5 bg-transparent text-sm focus:outline-none text-blackColor dark:text-blackColor-dark border border-borderColor dark:border-borderColor-dark placeholder:text-placeholder placeholder:opacity-80"
-                                    />
-                                </div>
-                            </div>
-                            <div className="grid grid-cols-1 gap-y-5 mb-5">
-                                <div>
-                                    <label className="text-sm text-blackColor dark:text-blackColor-dark mb-5px block">
-                                        <span className="leading-1.8">
-                                            Post Code/Zip Code*
-                                        </span>
-                                    </label>
-                                    <input
-                                        type="text"
-                                        placeholder="Post Code/Zip Code"
-                                        className="w-full h-50px leading-50px px-5 bg-transparent text-sm focus:outline-none text-blackColor dark:text-blackColor-dark border border-borderColor dark:border-borderColor-dark placeholder:text-placeholder placeholder:opacity-80"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="text-sm text-blackColor dark:text-blackColor-dark mb-5px block">
-                                        <span className="leading-1.8">
-                                            Order Notes
-                                        </span>
-                                    </label>
-                                    <input
-                                        type="text"
-                                        placeholder="Order Notes"
-                                        className="w-full h-50px leading-50px px-5 bg-transparent text-sm focus:outline-none text-blackColor dark:text-blackColor-dark border border-borderColor dark:border-borderColor-dark placeholder:text-placeholder placeholder:opacity-80"
-                                    />
+        <section className="py-8 antialiased">
+            <div className="mx-auto max-w-7xl px-4 lg:px-0">
+                <h2 className="text-xl font-semibold text-gray-900 sm:text-2xl">
+                    Checkout
+                </h2>
+                <form onSubmit={onSubmit}>
+                    <div className="mt-6 sm:mt-8 lg:flex lg:items-start lg:gap-12 xl:gap-16">
+                        <div className="min-w-0 flex-1 space-y-8">
+                            <div className="space-y-4">
+                                <h2 className="text-xl font-semibold text-gray-900">
+                                    Delivery Details
+                                </h2>
+                                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                                    <div>
+                                        <label
+                                            htmlFor="your_name"
+                                            className="mb-2 block text-sm font-medium text-gray-900"
+                                        >
+                                            Your name
+                                        </label>
+                                        <Input
+                                            type="text"
+                                            placeholder="Enter Your Name"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label
+                                            htmlFor="your_email"
+                                            className="mb-2 block text-sm font-medium text-gray-900"
+                                        >
+                                            Your email
+                                        </label>
+                                        <Input
+                                            type="email"
+                                            placeholder="name@email.com"
+                                        />
+                                    </div>
+                                    <div>
+                                        <div className="mb-2 flex items-center gap-2">
+                                            <label
+                                                htmlFor="select-country-input-3"
+                                                className="block text-sm font-medium text-gray-900"
+                                            >
+                                                Country
+                                            </label>
+                                        </div>
+                                        <Select>
+                                            <SelectTrigger className="w-full">
+                                                <SelectValue placeholder="Select Country" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="United States">
+                                                    United States
+                                                </SelectItem>
+                                                <SelectItem value="Australia">
+                                                    Australia
+                                                </SelectItem>
+                                                <SelectItem value="France">
+                                                    France
+                                                </SelectItem>
+                                                <SelectItem value="Spain">
+                                                    Spain
+                                                </SelectItem>
+                                                <SelectItem value="United Kingdom">
+                                                    United Kingdom
+                                                </SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+                                    <div>
+                                        <div className="mb-2 flex items-center gap-2">
+                                            <label
+                                                htmlFor="select-city-input-3"
+                                                className="block text-sm font-medium text-gray-900"
+                                            >
+                                                City
+                                            </label>
+                                        </div>
+                                        <Select>
+                                            <SelectTrigger className="w-full">
+                                                <SelectValue placeholder="Select City" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="San Francisco">
+                                                    San Francisco
+                                                </SelectItem>
+                                                <SelectItem value="New York">
+                                                    New York
+                                                </SelectItem>
+                                                <SelectItem value="Los Angeles">
+                                                    Los Angeles
+                                                </SelectItem>
+                                                <SelectItem value="Chicago">
+                                                    Chicago
+                                                </SelectItem>
+                                                <SelectItem value="Houston">
+                                                    Houston
+                                                </SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+                                    <div className="col-span-2">
+                                        <label
+                                            htmlFor="email"
+                                            className="mb-2 block text-sm font-medium text-gray-900"
+                                        >
+                                            Additional Information
+                                        </label>
+                                        <Textarea
+                                            rows={5}
+                                            placeholder="Type your message here."
+                                        />
+                                    </div>
                                 </div>
                             </div>
-                        </form>
-                    </div>
-                    {/* right */}
-                    <div className="p-10px lg:p-35px text-blackColor dark:text-blackColor-dark leading-1.8">
-                        {/* heading */}
-                        <h4 className="text-2xl text-blackColor dark:text-blackColor-dark font-bold mb-5">
-                            <span className="leading-1.2">Your Order</span>
-                        </h4>
-                        <div className="overflow-auto">
-                            <table className="table-fixed w-full border-t border-borderColor2 dark:border-borderColor2-dark font-medium">
-                                <thead>
-                                    <tr className="border-b border-borderColor2 dark:border-borderColor2-dark">
-                                        <td className="p-10px md:p-15px">
-                                            Product
-                                        </td>
-                                        <td className="p-10px md:p-15px">
-                                            Total
-                                        </td>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr className="border-b border-borderColor2 dark:border-borderColor2-dark">
-                                        <td className="p-10px md:p-15px">
-                                            Product Title × <span>1</span>
-                                        </td>
-                                        <td className="p-10px md:p-15px">
-                                            $1,026.00
-                                        </td>
-                                    </tr>
-                                    <tr className="border-b border-borderColor2 dark:border-borderColor2-dark">
-                                        <td className="p-10px md:p-15px">
-                                            Subtotal
-                                        </td>
-                                        <td className="p-10px md:p-15px">
-                                            $1,026.00
-                                        </td>
-                                    </tr>
-                                    <tr className="border-b border-borderColor2 dark:border-borderColor2-dark">
-                                        <td className="p-10px md:p-15px">
-                                            Shipping
-                                        </td>
-                                        <td className="p-10px md:p-15px">
-                                            <div className="flex gap-x-1 items-center">
-                                                <input
-                                                    type="radio"
-                                                    id="pay-toggle"
-                                                    name="ship"
-                                                    className="cursor-pointer"
-                                                />
-                                                <label
-                                                    htmlFor="pay-toggle"
-                                                    className="cursor-pointer"
-                                                >
-                                                    Flat Rate: <span>$03</span>
-                                                </label>
-                                            </div>
-                                            <div className="flex gap-x-1 items-center cursor-pointer">
-                                                <input
-                                                    type="radio"
-                                                    id="free-shipping"
-                                                    name="ship"
-                                                    className="cursor-pointer"
-                                                />
-                                                <label
-                                                    htmlFor="free-shipping"
-                                                    className="cursor-pointer"
-                                                >
-                                                    Free Shipping
-                                                </label>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td className="p-10px md:p-15px">
-                                            Total
-                                        </td>
-                                        <td className="p-10px md:p-15px">
-                                            $ 1.029.00
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
                         </div>
-                        {/* payment method */}
-                        <div>
-                            <div className="flex gap-x-2 mb-10px items-center">
-                                <input
-                                    type="radio"
-                                    id="bank"
-                                    name="ship"
-                                    className="cursor-pointer"
-                                />
-                                <label
-                                    htmlFor="bank"
-                                    className="cursor-pointer"
+                        <div className="mt-6 w-full space-y-6 sm:mt-8 lg:mt-0 lg:max-w-xs xl:max-w-md">
+                            <div className="space-y-4">
+                                <h3 className="text-xl font-semibold text-gray-900">
+                                    Payment
+                                </h3>
+                                <RadioGroup
+                                    defaultValue="option-one"
+                                    className="grid grid-cols-1 gap-4 md:grid-cols-2"
                                 >
-                                    Direct Bank Transfer
-                                </label>
+                                    <div className="rounded-lg border  p-4 px-4">
+                                        <div className="flex gap-2">
+                                            <RadioGroupItem
+                                                value="option-one"
+                                                id="option-one"
+                                                className="cursor-pointer"
+                                            />
+                                            <Label htmlFor="option-one" className="cursor-pointer">
+                                                Credit Card
+                                            </Label>
+                                        </div>
+                                        <p className="mt-1 text-xs font-normal text-gray-500">
+                                            Pay with your credit card
+                                        </p>
+                                    </div>
+                                    <div className="rounded-lg border  p-4 px-4">
+                                        <div className="flex gap-2">
+                                            <RadioGroupItem
+                                                value="option-two"
+                                                id="option-two"
+                                                className="cursor-pointer"
+                                            />
+                                            <Label htmlFor="option-two" className="cursor-pointer">
+                                                Payment on delivery
+                                            </Label>
+                                        </div>
+                                        <p className="mt-1 text-xs font-normal text-gray-500">
+                                            +$15 payment processing fee
+                                        </p>
+                                    </div>
+                                </RadioGroup>
                             </div>
-                            <div className="flex gap-x-2 mb-10px items-center">
-                                <input
-                                    type="radio"
-                                    id="cheque"
-                                    name="ship"
-                                    className="cursor-pointer"
-                                />
-                                <label
-                                    htmlFor="cheque"
-                                    className="cursor-pointer"
-                                >
-                                    Cheque Payment
-                                </label>
-                            </div>
-                            <div className="flex gap-x-2 mb-10px items-center">
-                                <input
-                                    type="radio"
-                                    id="cash"
-                                    name="ship"
-                                    className="cursor-pointer"
-                                />
-                                <label
-                                    htmlFor="cash"
-                                    className="cursor-pointer"
-                                >
-                                    Cash on Delivery
-                                </label>
-                            </div>
-                            <div className="flex gap-x-2 mb-10px items-center">
-                                <input
-                                    type="radio"
-                                    id="paypal"
-                                    name="ship"
-                                    className="cursor-pointer"
-                                />
-                                <label
-                                    htmlFor="paypal"
-                                    className="cursor-pointer"
-                                >
-                                    Paypal
-                                </label>
-                            </div>
-                            <div className="mt-30px">
-                                <button className="text-size-15 text-whiteColor bg-primaryColor px-25px py-10px border border-primaryColor hover:text-primaryColor hover:bg-whiteColor inline-block rounded group dark:hover:text-whiteColor dark:hover:bg-whiteColor-dark">
-                                    Place order
-                                </button>
+                            <div className="space-y-3">
+                                <Button variant={"default"} className="w-full">
+                                    Proceed to Payment
+                                </Button>
                             </div>
                         </div>
                     </div>
-                </div>
+                </form>
             </div>
         </section>
     );
