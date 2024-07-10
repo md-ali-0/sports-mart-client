@@ -5,9 +5,11 @@ import Navbar from "../navbar";
 
 const MainLayout: FC = () => {
     return (
-        <main>
+        <main className="flex flex-col h-screen">
             <Navbar />
-            <Outlet />
+            <div className="flex-1">
+                <Outlet />
+            </div>
             <Footer />
         </main>
     );

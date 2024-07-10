@@ -14,7 +14,7 @@ const Coupon : FC = () => {
                         {" "}
                         Do you have a voucher or gift card?{" "}
                     </label>
-                    <Input type="text" />
+                    <Input type="text" className="focus-visible:ring-0 focus-visible:outline-none" />
                 </div>
                 <Button type="submit" variant={"default"} className="w-full">
                     Apply Code
