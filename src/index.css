@@ -93,3 +93,15 @@
 .nav-link.active::after {
     width: 80%;
 }
+
+.navigation-wrapper {
+    position: relative;
+}
+
+.slider {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: 500;
+    /* max-height: 100vh; */
+}
