@@ -3,20 +3,20 @@ import ProductCard from "@/components/product-card";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuTrigger,
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuRadioGroup,
+    DropdownMenuRadioItem,
+    DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
 } from "@/components/ui/select";
 import { ChangeEvent, useMemo, useState } from "react";
 import { LuFilter, LuListOrdered, LuSearch } from "react-icons/lu";
@@ -33,7 +33,6 @@ interface Product {
 
 interface Filters {
     category: string[];
-    price: { min: number; max: number };
     brand: string[];
     rating: number;
 }
@@ -43,7 +42,6 @@ const AllProducts = () => {
     const [showFilter, setShowFilter] = useState<boolean>(false);
     const [filters, setFilters] = useState<Filters>({
         category: [],
-        price: { min: 0, max: 1000 },
         brand: [],
         rating: 0,
     });
@@ -58,7 +56,7 @@ const AllProducts = () => {
             category: "Basketball",
             price: 299.99,
             brand: "Spalding",
-            rating: 4.8,
+            rating: 3.8,
             image: "/placeholder.svg",
         },
         {
@@ -67,7 +65,7 @@ const AllProducts = () => {
             category: "Running",
             price: 79.99,
             brand: "Nike",
-            rating: 4.5,
+            rating: 5,
             image: "/placeholder.svg",
         },
         {
@@ -76,7 +74,7 @@ const AllProducts = () => {
             category: "Football",
             price: 149.99,
             brand: "Riddell",
-            rating: 4.2,
+            rating: 4,
             image: "/placeholder.svg",
         },
         {
@@ -85,7 +83,7 @@ const AllProducts = () => {
             category: "Yoga",
             price: 39.99,
             brand: "Manduka",
-            rating: 4.7,
+            rating: 3.7,
             image: "/placeholder.svg",
         },
         {
@@ -94,7 +92,7 @@ const AllProducts = () => {
             category: "Tennis",
             price: 99.99,
             brand: "Wilson",
-            rating: 4.3,
+            rating: 3.9,
             image: "/placeholder.svg",
         },
         {
@@ -156,13 +154,6 @@ const AllProducts = () => {
                 filters.category.includes(product.category)
             );
         }
-        if (filters.price.min > 0 || filters.price.max < 1000) {
-            filtered = filtered.filter(
-                (product) =>
-                    product.price >= filters.price.min &&
-                    product.price <= filters.price.max
-            );
-        }
         if (filters.brand.length > 0) {
             filtered = filtered.filter((product) =>
                 filters.brand.includes(product.brand)
@@ -170,7 +161,7 @@ const AllProducts = () => {
         }
         if (filters.rating > 0) {
             filtered = filtered.filter(
-                (product) => product.rating >= filters.rating
+                (product) => Number(product.rating) >= Number(filters.rating)
             );
         }
         if (sortOrder === "priceAsc") {
@@ -204,7 +195,6 @@ const AllProducts = () => {
     const handleClearFilters = () => {
         setFilters({
             category: [],
-            price: { min: 0, max: 1000 },
             brand: [],
             rating: 0,
         });
@@ -407,12 +397,6 @@ const AllProducts = () => {
                                     Cycling
                                 </Label>
                             </div>
-                        </div>
-                        <div>
-                            <h3 className="text-base font-semibold mb-2">
-                                Price
-                            </h3>
-                            <div />
                         </div>
                         <div>
                             <h3 className="text-base font-semibold mb-2">
