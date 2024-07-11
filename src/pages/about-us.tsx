@@ -1,8 +1,9 @@
-import AboutUsSection from "@/components/pages/about-us/about-us";
-import ContactInformation from "@/components/pages/about-us/contact-information";
-import OurLocation from "@/components/pages/about-us/our-location";
-import OurMission from "@/components/pages/about-us/our-mission";
-import OurTeam from "@/components/pages/about-us/our-team";
+import AboutUsSection from "@/components/about-us";
+import ContactInformation from "@/components/contact-information";
+import OurLocation from "@/components/our-location";
+import OurMission from "@/components/our-mission";
+import OurTeam from "@/components/our-team";
+
 
 export default function AboutUs() {
     return (

@@ -69,7 +69,10 @@
         @apply bg-background text-foreground;
     }
 }
-
+*::selection {
+    background-color: black;
+    color: #fff;
+}
 .nav-link {
     position: relative;
     padding-bottom: 0.25rem;

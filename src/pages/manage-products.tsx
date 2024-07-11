@@ -1,7 +1,8 @@
-import { DataTableColumnHeader } from "@/components/pages/manage-products/columns-header";
-import { DataTable } from "@/components/pages/manage-products/data-table";
-import DeleteProductDialog from "@/components/pages/manage-products/handle-delete-product";
-import EditProductDialog from "@/components/pages/manage-products/handle-edit-product";
+
+import { DataTableColumnHeader } from "@/components/columns-header";
+import { DataTable } from "@/components/data-table";
+import DeleteProductDialog from "@/components/handle-delete-product";
+import EditProductDialog from "@/components/handle-edit-product";
 import { Button } from "@/components/ui/button";
 import {
     DropdownMenu,

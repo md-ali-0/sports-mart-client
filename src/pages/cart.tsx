@@ -1,6 +1,6 @@
-import CartProduct from "@/components/pages/cart/cart-product";
-import Coupon from "@/components/pages/cart/coupon";
-import OrderSummery from "@/components/pages/cart/order-summery";
+import CartProduct from "@/components/cart-product";
+import Coupon from "@/components/coupon";
+import OrderSummery from "@/components/order-summery";
 
 const Cart = () => {
     return (
