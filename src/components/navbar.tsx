@@ -6,7 +6,7 @@ const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
     return (
         <>
-            <header className="flex bg-white border-b py-4 sm:px-8 px-6 min-h-[80px] tracking-wide relative z-50">
+            <header className="container flex bg-white border-b py-4 sm:px-8 px-6 min-h-[80px] tracking-wide relative z-50">
                 <div className="flex flex-wrap justify-between items-center lg:gap-y-2 gap-4 w-full">
                     <Link to={"/"}>
                         <img src={logo} alt="logo" className="w-28 sm:w-36" />

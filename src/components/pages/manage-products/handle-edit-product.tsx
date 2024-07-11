@@ -49,7 +49,7 @@ const EditProductDialog = ({ product, open, onClose, onSave }: EditProductDialog
 
     return (
         <Dialog open={open} onOpenChange={onClose}>
-            <DialogContent className="sm:max-w-[425px]">
+            <DialogContent aria-describedby={undefined} className="sm:max-w-[425px]">
                 <DialogHeader>
                     <DialogTitle>Edit Product</DialogTitle>
                 </DialogHeader>
@@ -57,31 +57,31 @@ const EditProductDialog = ({ product, open, onClose, onSave }: EditProductDialog
                     <Input
                         name="name"
                         placeholder="Enter product name"
-                        defaultValue={editedProduct?.name}
+                        defaultValue={product?.name}
                         onChange={handleInputChange}
                     />
                     <Textarea
                         name="description"
                         placeholder="Enter product description"
-                        defaultValue={editedProduct?.description}
+                        defaultValue={product?.description}
                         onChange={handleInputChange}
                     />
                     <Input
                         name="price"
                         type="number"
                         placeholder="Enter product price"
-                        defaultValue={editedProduct?.price}
+                        defaultValue={product?.price}
                         onChange={handleInputChange}
                     />
                     <Input
                         name="stock"
                         type="number"
                         placeholder="Enter product stock"
-                        defaultValue={editedProduct?.stock}
+                        defaultValue={product?.stock}
                         onChange={handleInputChange}
                     />
                     <Select
-                        defaultValue={editedProduct?.category}
+                        defaultValue={product?.category}
                         onValueChange={(value) => handleSelectChange("category", value)}
                     >
                         <SelectTrigger>
@@ -95,7 +95,7 @@ const EditProductDialog = ({ product, open, onClose, onSave }: EditProductDialog
                         </SelectContent>
                     </Select>
                     <Select
-                        defaultValue={editedProduct?.status}
+                        defaultValue={product?.status}
                         onValueChange={(value) => handleSelectChange("status", value)}
                     >
                         <SelectTrigger>
