@@ -1,3 +1,5 @@
+import Pagination from "@/components/pagination-all-products";
+import ProductCard from "@/components/product-card";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -17,7 +19,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ChangeEvent, useMemo, useState } from "react";
-import { LuFilter, LuListOrdered, LuSearch, LuStar } from "react-icons/lu";
+import { LuFilter, LuListOrdered, LuSearch } from "react-icons/lu";
 
 interface Product {
     id: number;
@@ -46,6 +48,8 @@ const AllProducts = () => {
         rating: 0,
     });
     const [sortOrder, setSortOrder] = useState<string>("priceAsc");
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const productsPerPage = 6;
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const products: Product[] = [
         {
@@ -102,7 +106,44 @@ const AllProducts = () => {
             rating: 4.6,
             image: "/placeholder.svg",
         },
+        {
+            id: 7,
+            name: "Golf Club",
+            category: "Golf",
+            price: 149.99,
+            brand: "Callaway",
+            rating: 4.1,
+            image: "/placeholder.svg",
+        },
+        {
+            id: 8,
+            name: "Boxing Gloves",
+            category: "Boxing",
+            price: 49.99,
+            brand: "Everlast",
+            rating: 4.4,
+            image: "/placeholder.svg",
+        },
+        {
+            id: 9,
+            name: "Hiking Backpack",
+            category: "Hiking",
+            price: 89.99,
+            brand: "Osprey",
+            rating: 4.3,
+            image: "/placeholder.svg",
+        },
+        {
+            id: 10,
+            name: "Swimming Goggles",
+            category: "Swimming",
+            price: 19.99,
+            brand: "Speedo",
+            rating: 4.6,
+            image: "/placeholder.svg",
+        },
     ];
+
     const filteredProducts = useMemo(() => {
         let filtered = products;
         if (searchTerm) {
@@ -142,6 +183,7 @@ const AllProducts = () => {
 
     const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(e.target.value);
+        setCurrentPage(1);
     };
 
     const handleFilterChange = (
@@ -152,6 +194,7 @@ const AllProducts = () => {
             ...prevFilters,
             [type]: value,
         }));
+        setCurrentPage(1);
     };
 
     // const handleSortChange = (value: string) => {
@@ -165,7 +208,19 @@ const AllProducts = () => {
             brand: [],
             rating: 0,
         });
+        setCurrentPage(1);
     };
+
+    const handlePageChange = (page: number) => {
+        setCurrentPage(page);
+    };
+
+    const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+    const paginatedProducts = useMemo(() => {
+        const startIndex = (currentPage - 1) * productsPerPage;
+        return filteredProducts.slice(startIndex, startIndex + productsPerPage);
+    }, [filteredProducts, currentPage, productsPerPage]);
+
     return (
         <div className="container mx-auto px-4 md:px-6 py-8">
             <div className="flex flex-col sm:flex-row items-center justify-between mb-6">
@@ -495,10 +550,7 @@ const AllProducts = () => {
                             <Select
                                 value={filters.rating.toString()}
                                 onValueChange={(value) =>
-                                    handleFilterChange(
-                                        "rating",
-                                        parseFloat(value)
-                                    )
+                                    handleFilterChange("rating", Number(value))
                                 }
                             >
                                 <SelectTrigger className="w-full">
@@ -533,45 +585,19 @@ const AllProducts = () => {
                         </div>
                     </div>
                 </div>
-                <div className="md:col-span-8 lg:col-span-9 ">
+                <div className="md:col-span-8 lg:col-span-9">
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                        {filteredProducts.map((product) => (
-                            <div
-                                key={product.id}
-                                className="rounded-lg overflow-hidden border p-2.5"
-                            >
-                                <img
-                                    src="/placeholder.svg"
-                                    alt={product.name}
-                                    width={400}
-                                    height={400}
-                                    className="w-full h-48 object-cover"
-                                />
-                                <div className="py-2.5 px-2">
-                                    <h3 className="text-lg font-semibold mb-2">
-                                        {product.name}
-                                    </h3>
-                                    <div className="flex items-center mb-2">
-                                        <div className="flex items-center gap-1 text-primary">
-                                            <LuStar className="w-5 h-5" />
-                                            <span>
-                                                {product.rating.toFixed(1)}
-                                            </span>
-                                        </div>
-                                        <span className="text-muted-foreground text-sm ml-2">
-                                            ({product.category})
-                                        </span>
-                                    </div>
-                                    <div className="flex items-center justify-between">
-                                        <span className="text-lg font-semibold">
-                                            ${product.price.toFixed(2)}
-                                        </span>
-                                        <Button size="sm">Add to Cart</Button>
-                                    </div>
-                                </div>
-                            </div>
+                        {paginatedProducts.map((product) => (
+                            <ProductCard key={product.id} product={product} />
                         ))}
                     </div>
+                </div>
+                <div className="md:col-span-12">
+                    <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={handlePageChange}
+                    />
                 </div>
             </div>
         </div>
