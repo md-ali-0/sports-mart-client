@@ -2,6 +2,7 @@ import { DataTableColumnHeader } from "@/components/columns-header";
 import { DataTable } from "@/components/data-table";
 import DeleteProductDialog from "@/components/handle-delete-product";
 import EditProductDialog from "@/components/handle-edit-product";
+import Loading from "@/components/loading";
 import { Button } from "@/components/ui/button";
 import {
     DropdownMenu,
@@ -105,7 +106,7 @@ const ManageProducts = () => {
     ];
 
     if (isLoading) {
-        return <div>Loading...</div>;
+        return <Loading/>
     }
 
     return (

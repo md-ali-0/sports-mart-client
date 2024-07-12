@@ -1,56 +1,24 @@
+import { IProduct } from "@/interface/IProduct";
+import { useGetAllProductsQuery } from "@/redux/features/products/productsApi";
+import { useEffect } from "react";
+import { toast } from "sonner";
 import ProductCard from "./product-card";
+import SkeletonProductCard from "./Skeleton-product-card";
 
 const FeaturedSection = () => {
-    const featuredProducts = [
-        {
-            _id: "asd",
-            name: "Acme Prism T-Shirt",
-            category: "Clothing",
-            stock: 50,
-            brand: "Acme",
-            rating: 4.2,
-            description:
-                "A stylish and comfortable t-shirt with a unique prism design.",
-            price: 24.99,
-            image: "/placeholder.svg",
-        },
-        {
-            _id: "201",
-            name: "Gamer Gear Pro Controller",
-            category: "Electronics",
-            stock: 25,
-            brand: "Gamer Gear",
-            rating: 4.7,
-            description:
-                "A high-performance gaming controller with advanced features.",
-            price: 59.99,
-            image: "/placeholder.svg",
-        },
-        {
-            _id: "301",
-            name: "Fitness Tracker Pro",
-            category: "Accessories",
-            stock: 75,
-            brand: "Fitness Tech",
-            rating: 4.5,
-            description:
-                "A comprehensive fitness tracker to help you reach your goals.",
-            price: 79.99,
-            image: "/placeholder.svg",
-        },
-        {
-            _id: "401",
-            name: "Fitness Tracker Pro",
-            category: "Accessories",
-            stock: 75,
-            brand: "Fitness Tech",
-            rating: 4.5,
-            description:
-                "A comprehensive fitness tracker to help you reach your goals.",
-            price: 79.99,
-            image: "/placeholder.svg",
-        },
-    ];
+    const query = {
+        limit: 4,
+        sort: '-createdAt',
+        page: 1
+    };
+    const { data, isError, isLoading, isSuccess, error } = useGetAllProductsQuery(query);
+
+    useEffect(() => {
+        if (isError) {
+            toast.error("Something Went Wrong");
+        }
+    }, [isError, isSuccess, error]);
+
     return (
         <section className="py-12 md:py-16">
             <div className="container mx-auto px-4 md:px-6">
@@ -66,9 +34,14 @@ const FeaturedSection = () => {
                     </p>
                 </div>
                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-                    {featuredProducts.map((product) => (
-                        <ProductCard key={product._id} product={product} />
-                    ))}
+                    {isLoading 
+                        ? Array.from({ length: 4 }).map((_, index) => (
+                            <SkeletonProductCard key={index} />
+                          ))
+                        : data.data.map((product: IProduct) => (
+                            <ProductCard key={product._id} product={product} />
+                          ))
+                    }
                 </div>
             </div>
         </section>

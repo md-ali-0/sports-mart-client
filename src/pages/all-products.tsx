@@ -1,5 +1,6 @@
 import BrandFilter from "@/components/brand-filter";
 import CategoryFilter from "@/components/category-filter";
+import Loading from "@/components/loading";
 import Pagination from "@/components/pagination-all-products";
 import ProductCard from "@/components/product-card";
 import RatingFilter from "@/components/rating-filter";
@@ -16,11 +17,16 @@ import { IProduct } from "@/interface/IProduct";
 import { useGetAllProductsQuery } from "@/redux/features/products/productsApi";
 import { ChangeEvent, useEffect, useState } from "react";
 import { LuFilter, LuListOrdered, LuSearch } from "react-icons/lu";
+import { useSearchParams } from 'react-router-dom';
 import { toast } from "sonner";
 
 const AllProducts = () => {
+    const [searchParams] = useSearchParams();
+
+    const categoryParams = searchParams.get('category');
+
     const [searchTerm, setSearchTerm] = useState<string>("");
-    const [category, setCategory] = useState<string | undefined>(undefined);
+    const [category, setCategory] = useState<string | undefined | null>(categoryParams);
     const [brand, setBrand] = useState<string | undefined>(undefined);
     const [showFilter, setShowFilter] = useState<boolean>(false);
     const [rating, setRating] = useState<number | undefined>(undefined);
@@ -81,7 +87,7 @@ const AllProducts = () => {
     };
 
     if (isLoading) {
-        return <div>Loading...</div>;
+        return <Loading/>
     }
 
     const totalPages = Math.ceil(data.data.length / productsPerPage);
