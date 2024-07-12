@@ -3,7 +3,7 @@ import ProductCard from "./product-card";
 const FeaturedSection = () => {
     const featuredProducts = [
         {
-            id: 101,
+            _id: "asd",
             name: "Acme Prism T-Shirt",
             category: "Clothing",
             stock: 50,
@@ -15,7 +15,7 @@ const FeaturedSection = () => {
             image: "/placeholder.svg",
         },
         {
-            id: 201,
+            _id: "201",
             name: "Gamer Gear Pro Controller",
             category: "Electronics",
             stock: 25,
@@ -27,7 +27,7 @@ const FeaturedSection = () => {
             image: "/placeholder.svg",
         },
         {
-            id: 301,
+            _id: "301",
             name: "Fitness Tracker Pro",
             category: "Accessories",
             stock: 75,
@@ -39,7 +39,7 @@ const FeaturedSection = () => {
             image: "/placeholder.svg",
         },
         {
-            id: 401,
+            _id: "401",
             name: "Fitness Tracker Pro",
             category: "Accessories",
             stock: 75,
@@ -67,7 +67,7 @@ const FeaturedSection = () => {
                 </div>
                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                     {featuredProducts.map((product) => (
-                        <ProductCard key={product.id} product={product} />
+                        <ProductCard key={product._id} product={product} />
                     ))}
                 </div>
             </div>
