@@ -1,4 +1,3 @@
-
 import { DataTableColumnHeader } from "@/components/columns-header";
 import { DataTable } from "@/components/data-table";
 import DeleteProductDialog from "@/components/handle-delete-product";
@@ -25,11 +24,12 @@ const ManageProducts = () => {
         null
     );
 
-    const { data, isError, isLoading , isSuccess, error} = useGetAllProductsQuery('')
+    const { data, isError, isLoading, isSuccess, error } =
+        useGetAllProductsQuery("");
 
     useEffect(() => {
         if (isError) {
-            toast.error('Something Went Wrong');
+            toast.error("Something Went Wrong");
         }
     }, [isError, isSuccess, error]);
 
@@ -43,20 +43,6 @@ const ManageProducts = () => {
         setDeleteDialogOpen(true);
     };
 
-    const handleSaveProduct = (product: IProduct) => {
-        console.log("Saving product:", product);
-        setEditDialogOpen(false);
-        // Perform your save logic here.
-    };
-
-    const handleConfirmDeleteProduct = async () => {
-        if (productToDelete) {
-            console.log("Deleting product:", productToDelete);
-            // Perform your delete logic here.
-            setDeleteDialogOpen(false);
-        }
-    };
-
     const columns: ColumnDef<IProduct>[] = [
         {
             accessorKey: "name",
@@ -68,11 +54,15 @@ const ManageProducts = () => {
         },
         {
             accessorKey: "price",
-            header: ({ column }) => <DataTableColumnHeader column={column} title="Price"/>
+            header: ({ column }) => (
+                <DataTableColumnHeader column={column} title="Price" />
+            ),
         },
         {
             accessorKey: "stock",
-            header: ({ column }) => <DataTableColumnHeader column={column} title="Stock"/>
+            header: ({ column }) => (
+                <DataTableColumnHeader column={column} title="Stock" />
+            ),
         },
         {
             accessorKey: "category",
@@ -82,7 +72,7 @@ const ManageProducts = () => {
             accessorKey: "brand",
             header: "Brand",
             cell: ({ row }) => {
-                return <span className="capitalize">{row.original.brand}</span>
+                return <span className="capitalize">{row.original.brand}</span>;
             },
         },
         {
@@ -125,13 +115,11 @@ const ManageProducts = () => {
                 product={productToEdit}
                 open={editDialogOpen}
                 onClose={() => setEditDialogOpen(false)}
-                onSave={handleSaveProduct}
             />
             <DeleteProductDialog
                 product={productToDelete}
                 open={deleteDialogOpen}
                 onClose={() => setDeleteDialogOpen(false)}
-                onConfirm={handleConfirmDeleteProduct}
             />
         </div>
     );

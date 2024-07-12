@@ -23,7 +23,7 @@ import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 interface EditProductDialogProps {
-    product: IProduct;
+    product: IProduct | null;
     open: boolean;
     onClose: () => void;
 }
@@ -70,6 +70,9 @@ const EditProductDialog = ({
         );
     }, [product, reset]);
 
+    console.log(product);
+    
+
     const onSubmit = async (data: IProduct) => {
         const formData = new FormData();
         formData.append("name", data.name);
@@ -78,11 +81,13 @@ const EditProductDialog = ({
         formData.append("stock", String(data.stock));
         formData.append("category", data.category);
         formData.append("brand", data.brand);
-        if (data.image[0]) {
+        if (Array.isArray(data.image)) {
             formData.append("image", data.image[0]);
         }
 
-        await updateProduct({ data: formData, id: product._id });
+        if (product) {
+            await updateProduct({ data: formData, id: product._id });
+        }
         onClose();
     };
 
