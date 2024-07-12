@@ -1,7 +1,9 @@
+import BrandFilter from "@/components/brand-filter";
+import CategoryFilter from "@/components/category-filter";
 import Pagination from "@/components/pagination-all-products";
 import ProductCard from "@/components/product-card";
+import RatingFilter from "@/components/rating-filter";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -10,7 +12,6 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { IProduct } from "@/interface/IProduct";
 import { useGetAllProductsQuery } from "@/redux/features/products/productsApi";
 import { ChangeEvent, useEffect, useState } from "react";
@@ -19,18 +20,22 @@ import { toast } from "sonner";
 
 const AllProducts = () => {
     const [searchTerm, setSearchTerm] = useState<string>("");
-    const [category, setCategory] = useState<string>();
+    const [category, setCategory] = useState<string | undefined>(undefined);
+    const [brand, setBrand] = useState<string | undefined>(undefined);
     const [showFilter, setShowFilter] = useState<boolean>(false);
+    const [rating, setRating] = useState<number | undefined>(undefined);
     const [currentPage, setCurrentPage] = useState(1);
     const [productsPerPage] = useState(6);
-    const [sortOrder, setSortOrder] = useState<string>("");
+    const [sort, setSort] = useState<string | undefined>(undefined);
 
     const query = {
         searchTerm,
         limit: productsPerPage,
-        sort: sortOrder,
+        sort,
         page: currentPage,
         category,
+        brand,
+        rating,
     };
     const { data, isError, isLoading, isSuccess, error } =
         useGetAllProductsQuery(query);
@@ -54,6 +59,27 @@ const AllProducts = () => {
             setCategory(value);
         } else setCategory(undefined);
     };
+    const handleBrandChange = (checked: boolean | string, value: string) => {
+        if (checked) {
+            setBrand(value);
+        } else setBrand(undefined);
+    };
+
+    const handleRatingChange = (value: number) => {
+        if (value > 0) {
+            setRating(value);
+        } else setRating(undefined);
+    };
+
+    const handleClearFilters = () => {
+        setSearchTerm("");
+        setCategory(undefined);
+        setBrand(undefined);
+        setRating(undefined);
+        setSort(undefined);
+        setCurrentPage(1);
+    };
+
     if (isLoading) {
         return <div>Loading...</div>;
     }
@@ -91,8 +117,8 @@ const AllProducts = () => {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent className="w-[200px]">
                             <DropdownMenuRadioGroup
-                                value={sortOrder}
-                                onValueChange={setSortOrder}
+                                value={sort}
+                                onValueChange={setSort}
                             >
                                 <DropdownMenuRadioItem value="-price">
                                     Price: Low to High
@@ -110,280 +136,29 @@ const AllProducts = () => {
                     className="md:col-span-4 lg:col-span-3 rounded-lg border p-6 md:!block"
                     style={{ display: `${showFilter ? "block" : "none"}` }}
                 >
-                    <h2 className="text-lg font-semibold mb-4">Filters</h2>
+                    <h2 className="text-xl font-semibold mb-4">Filters</h2>
                     <div className="grid gap-6">
-                        <div>
-                            <h3 className="text-base font-semibold mb-2">
-                                Category
-                            </h3>
-                            <div className="grid gap-2">
-                                <Label className="flex items-center gap-2 cursor-pointer text-[15px] font-normal">
-                                    <Checkbox
-                                        checked={category === "basketball"}
-                                        onCheckedChange={(checked) =>
-                                            handleFilterChange(
-                                                checked,
-                                                "basketball"
-                                            )
-                                        }
-                                    />
-                                    Basketball
-                                </Label>
-                                <Label className="flex items-center gap-2 cursor-pointer text-[15px] font-normal">
-                                    <Checkbox
-                                        checked={category === "fitness"}
-                                        onCheckedChange={(checked) =>
-                                            handleFilterChange(
-                                                checked,
-                                                "fitness"
-                                            )
-                                        }
-                                    />
-                                    Fitness
-                                </Label>
-                                <Label className="flex items-center gap-2 cursor-pointer text-[15px] font-normal">
-                                    <Checkbox
-                                        checked={category === "golf"}
-                                        onCheckedChange={(checked) =>
-                                            handleFilterChange(
-                                                checked,
-                                                "golf"
-                                            )
-                                        }
-                                    />
-                                    Golf
-                                </Label>
-                                <Label className="flex items-center gap-2 cursor-pointer text-[15px] font-normal">
-                                    <Checkbox
-                                        checked={category === "yoga"}
-                                        onCheckedChange={(checked) =>
-                                            handleFilterChange(
-                                                checked,
-                                                "yoga"
-                                            )
-                                        }
-                                    />
-                                    Yoga
-                                </Label>
-                                <Label className="flex items-center gap-2 cursor-pointer text-[15px] font-normal">
-                                    <Checkbox
-                                        checked={category === "football"}
-                                        onCheckedChange={(checked) =>
-                                            handleFilterChange(
-                                                checked,
-                                                "football"
-                                            )
-                                        }
-                                    />
-                                    Football
-                                </Label>
-                                <Label className="flex items-center gap-2 cursor-pointer text-[15px] font-normal">
-                                    <Checkbox
-                                        checked={category === "tennis"}
-                                        onCheckedChange={(checked) =>
-                                            handleFilterChange(
-                                                checked,
-                                                "tennis"
-                                            )
-                                        }
-                                    />
-                                    Tennis
-                                </Label>
-                                <Label className="flex items-center gap-2 cursor-pointer text-[15px] font-normal">
-                                    <Checkbox
-                                        checked={category === "swimming"}
-                                        onCheckedChange={(checked) =>
-                                            handleFilterChange(
-                                                checked,
-                                                "swimming"
-                                            )
-                                        }
-                                    />
-                                    Swimming
-                                </Label>
-                                <Label className="flex items-center gap-2 cursor-pointer text-[15px] font-normal">
-                                    <Checkbox
-                                        checked={category === "hiking"}
-                                        onCheckedChange={(checked) =>
-                                            handleFilterChange(
-                                                checked,
-                                                "hiking"
-                                            )
-                                        }
-                                    />
-                                    Hiking
-                                </Label>
-                            </div>
-                        </div>
-                        <div>
-                            <h3 className="text-base font-semibold mb-2">
-                                Brand
-                            </h3>
-                            {/* <div className="grid gap-2">
-                                <Label className="flex items-center gap-2 cursor-pointer text-[15px] font-normal">
-                                    <Checkbox
-                                        checked={filters.brand.includes(
-                                            "Spalding"
-                                        )}
-                                        onCheckedChange={(checked) =>
-                                            handleFilterChange(
-                                                "brand",
-                                                checked
-                                                    ? [
-                                                          ...filters.brand,
-                                                          "Spalding",
-                                                      ]
-                                                    : filters.brand.filter(
-                                                          (b) =>
-                                                              b !== "Spalding"
-                                                      )
-                                            )
-                                        }
-                                    />
-                                    Spalding
-                                </Label>
-                                <Label className="flex items-center gap-2 cursor-pointer text-[15px] font-normal">
-                                    <Checkbox
-                                        checked={filters.brand.includes("Nike")}
-                                        onCheckedChange={(checked) =>
-                                            handleFilterChange(
-                                                "brand",
-                                                checked
-                                                    ? [...filters.brand, "Nike"]
-                                                    : filters.brand.filter(
-                                                          (b) => b !== "Nike"
-                                                      )
-                                            )
-                                        }
-                                    />
-                                    Nike
-                                </Label>
-                                <Label className="flex items-center gap-2 cursor-pointer text-[15px] font-normal">
-                                    <Checkbox
-                                        checked={filters.brand.includes(
-                                            "Riddell"
-                                        )}
-                                        onCheckedChange={(checked) =>
-                                            handleFilterChange(
-                                                "brand",
-                                                checked
-                                                    ? [
-                                                          ...filters.brand,
-                                                          "Riddell",
-                                                      ]
-                                                    : filters.brand.filter(
-                                                          (b) => b !== "Riddell"
-                                                      )
-                                            )
-                                        }
-                                    />
-                                    Riddell
-                                </Label>
-                                <Label className="flex items-center gap-2 cursor-pointer text-[15px] font-normal">
-                                    <Checkbox
-                                        checked={filters.brand.includes(
-                                            "Manduka"
-                                        )}
-                                        onCheckedChange={(checked) =>
-                                            handleFilterChange(
-                                                "brand",
-                                                checked
-                                                    ? [
-                                                          ...filters.brand,
-                                                          "Manduka",
-                                                      ]
-                                                    : filters.brand.filter(
-                                                          (b) => b !== "Manduka"
-                                                      )
-                                            )
-                                        }
-                                    />
-                                    Manduka
-                                </Label>
-                                <Label className="flex items-center gap-2 cursor-pointer text-[15px] font-normal">
-                                    <Checkbox
-                                        checked={filters.brand.includes(
-                                            "Wilson"
-                                        )}
-                                        onCheckedChange={(checked) =>
-                                            handleFilterChange(
-                                                "brand",
-                                                checked
-                                                    ? [
-                                                          ...filters.brand,
-                                                          "Wilson",
-                                                      ]
-                                                    : filters.brand.filter(
-                                                          (b) => b !== "Wilson"
-                                                      )
-                                            )
-                                        }
-                                    />
-                                    Wilson
-                                </Label>
-                                <Label className="flex items-center gap-2 cursor-pointer text-[15px] font-normal">
-                                    <Checkbox
-                                        checked={filters.brand.includes(
-                                            "Schwinn"
-                                        )}
-                                        onCheckedChange={(checked) =>
-                                            handleFilterChange(
-                                                "brand",
-                                                checked
-                                                    ? [
-                                                          ...filters.brand,
-                                                          "Schwinn",
-                                                      ]
-                                                    : filters.brand.filter(
-                                                          (b) => b !== "Schwinn"
-                                                      )
-                                            )
-                                        }
-                                    />
-                                    Schwinn
-                                </Label>
-                            </div> */}
-                        </div>
-                        <div>
-                            <h3 className="text-base font-semibold mb-2">
-                                Rating
-                            </h3>
-                            {/* <Select
-                                value={filters.rating.toString()}
-                                onValueChange={(value) =>
-                                    handleFilterChange("rating", Number(value))
-                                }
-                            >
-                                <SelectTrigger className="w-full">
-                                    <SelectValue placeholder="Select rating" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="0">
-                                        Any rating
-                                    </SelectItem>
-                                    <SelectItem value="4">
-                                        4 stars and above
-                                    </SelectItem>
-                                    <SelectItem value="3">
-                                        3 stars and above
-                                    </SelectItem>
-                                    <SelectItem value="2">
-                                        2 stars and above
-                                    </SelectItem>
-                                    <SelectItem value="1">
-                                        1 star and above
-                                    </SelectItem>
-                                </SelectContent>
-                            </Select> */}
-                        </div>
-                        {/* <div className="flex justify-end gap-2">
+                        <CategoryFilter
+                            category={category}
+                            handleFilterChange={handleFilterChange}
+                        />
+                        <BrandFilter
+                            brand={brand}
+                            handleBrandChange={handleBrandChange}
+                        />
+                        <RatingFilter
+                            rating={rating}
+                            handleRatingChange={handleRatingChange}
+                        />
+
+                        <div className="flex justify-end gap-2">
                             <Button
                                 variant="outline"
                                 onClick={handleClearFilters}
                             >
                                 Clear Filters
                             </Button>
-                        </div> */}
+                        </div>
                     </div>
                 </div>
                 <div className="md:col-span-8 lg:col-span-9">
