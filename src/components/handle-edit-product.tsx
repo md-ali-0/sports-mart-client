@@ -17,106 +17,202 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { IProduct } from "@/interface/IProduct";
-import { useState } from "react";
+import { useUpdateProductMutation } from "@/redux/features/products/productsApi";
+import { useEffect } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 interface EditProductDialogProps {
-    product: IProduct | null;
+    product: IProduct;
     open: boolean;
     onClose: () => void;
-    onSave: (product: IProduct) => void;
 }
 
-const EditProductDialog = ({ product, open, onClose, onSave }: EditProductDialogProps) => {
-    const [editedProduct, setEditedProduct] = useState<IProduct | null>(product);
+const EditProductDialog = ({
+    product,
+    open,
+    onClose,
+}: EditProductDialogProps) => {
+    const { register, control, handleSubmit, reset } = useForm<IProduct>({
+        defaultValues: product || {
+            name: "",
+            description: "",
+            price: 0,
+            stock: 0,
+            category: "",
+            brand: "",
+            image: "",
+        },
+    });
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        if (editedProduct) {
-            setEditedProduct({
-                ...editedProduct,
-                [e.target.name]: e.target.value,
-            });
-        }
-    };
+    const [updateProduct, { isSuccess, isError, error }] =
+        useUpdateProductMutation();
 
-    const handleSelectChange = (name: string, value: string) => {
-        if (editedProduct) {
-            setEditedProduct({
-                ...editedProduct,
-                [name]: value,
-            });
+    useEffect(() => {
+        if (isError) {
+            toast.error("Something Went Wrong");
+        } else if (isSuccess) {
+            toast.success("Product Updated successfully");
         }
+    }, [isError, isSuccess, error]);
+
+    useEffect(() => {
+        reset(
+            product || {
+                name: "",
+                description: "",
+                price: 0,
+                stock: 0,
+                category: "",
+                brand: "",
+                image: "",
+            }
+        );
+    }, [product, reset]);
+
+    const onSubmit = async (data: IProduct) => {
+        const formData = new FormData();
+        formData.append("name", data.name);
+        formData.append("description", data.description);
+        formData.append("price", String(data.price));
+        formData.append("stock", String(data.stock));
+        formData.append("category", data.category);
+        formData.append("brand", data.brand);
+        if (data.image[0]) {
+            formData.append("image", data.image[0]);
+        }
+
+        await updateProduct({ data: formData, id: product._id });
+        onClose();
     };
 
     return (
         <Dialog open={open} onOpenChange={onClose}>
-            <DialogContent aria-describedby={undefined} className="sm:max-w-[425px]">
+            <DialogContent
+                aria-describedby={undefined}
+                className="sm:max-w-[425px]"
+            >
                 <DialogHeader>
                     <DialogTitle>Edit Product</DialogTitle>
                 </DialogHeader>
-                <div className="space-y-4">
+                <form
+                    onSubmit={handleSubmit(onSubmit)}
+                    className="grid grid-cols-2 gap-4"
+                >
                     <Input
+                        {...register("name")}
                         name="name"
                         placeholder="Enter product name"
-                        defaultValue={product?.name}
-                        onChange={handleInputChange}
-                    />
-                    <Textarea
-                        name="description"
-                        placeholder="Enter product description"
-                        defaultValue={product?.description}
-                        onChange={handleInputChange}
+                        required
                     />
                     <Input
+                        {...register("image")}
+                        name="image"
+                        type="file"
+                    />
+                    <Textarea
+                        {...register("description")}
+                        name="description"
+                        placeholder="Enter product description"
+                        className="col-span-2"
+                        required
+                    />
+                    <Input
+                        {...register("price")}
                         name="price"
                         type="number"
                         placeholder="Enter product price"
-                        defaultValue={product?.price}
-                        onChange={handleInputChange}
+                        required
                     />
                     <Input
+                        {...register("stock")}
                         name="stock"
                         type="number"
                         placeholder="Enter product stock"
-                        defaultValue={product?.stock}
-                        onChange={handleInputChange}
+                        required
                     />
-                    <Select
-                        defaultValue={product?.category}
-                        onValueChange={(value) => handleSelectChange("category", value)}
-                    >
-                        <SelectTrigger>
-                            <SelectValue placeholder="Select category" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="Electronics">Electronics</SelectItem>
-                            <SelectItem value="Apparel">Apparel</SelectItem>
-                            <SelectItem value="Home">Home</SelectItem>
-                            <SelectItem value="Accessories">Accessories</SelectItem>
-                        </SelectContent>
-                    </Select>
-                    <Select
-                        onValueChange={(value) =>
-                            handleSelectChange("brand", value)
-                        }
-                    >
-                        <SelectTrigger>
-                            <SelectValue placeholder="Select status" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="Active">Active</SelectItem>
-                            <SelectItem value="Draft">Draft</SelectItem>
-                            <SelectItem value="Archived">Archived</SelectItem>
-                        </SelectContent>
-                    </Select>
-                </div>
-                <DialogFooter>
-                    <DialogClose asChild>
-                        <Button variant="outline">Cancel</Button>
-                    </DialogClose>
-                    <Button onClick={() => onSave(editedProduct as IProduct)}>
-                        Save
-                    </Button>
-                </DialogFooter>
+                    <Controller
+                        name="category"
+                        control={control}
+                        render={({ field }) => (
+                            <Select
+                                defaultValue={field.value}
+                                onValueChange={field.onChange}
+                            >
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Select category" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="basketball">
+                                        Basketball
+                                    </SelectItem>
+                                    <SelectItem value="fitness">
+                                        Fitness
+                                    </SelectItem>
+                                    <SelectItem value="golf">Golf</SelectItem>
+                                    <SelectItem value="yoga">Yoga</SelectItem>
+                                    <SelectItem value="football">
+                                        Football
+                                    </SelectItem>
+                                    <SelectItem value="tennis">
+                                        Tennis
+                                    </SelectItem>
+                                    <SelectItem value="swimming">
+                                        Swimming
+                                    </SelectItem>
+                                    <SelectItem value="hiking">
+                                        Hiking
+                                    </SelectItem>
+                                </SelectContent>
+                            </Select>
+                        )}
+                    />
+                    <Controller
+                        name="brand"
+                        control={control}
+                        render={({ field }) => (
+                            <Select
+                                defaultValue={field.value}
+                                onValueChange={field.onChange}
+                            >
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Select Brand" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="nike">Nike</SelectItem>
+                                    <SelectItem value="adidas">
+                                        Adidas
+                                    </SelectItem>
+                                    <SelectItem value="under-armour">
+                                        Under Armour
+                                    </SelectItem>
+                                    <SelectItem value="puma">Puma</SelectItem>
+                                    <SelectItem value="reebok">
+                                        Reebok
+                                    </SelectItem>
+                                    <SelectItem value="wilson">
+                                        Wilson
+                                    </SelectItem>
+                                    <SelectItem value="columbia">
+                                        Columbia
+                                    </SelectItem>
+                                    <SelectItem value="schwinn">
+                                        Schwinn
+                                    </SelectItem>
+                                    <SelectItem value="mizuno">
+                                        Mizuno
+                                    </SelectItem>
+                                </SelectContent>
+                            </Select>
+                        )}
+                    />
+                    <DialogFooter className="col-span-2">
+                        <DialogClose asChild>
+                            <Button variant="outline">Cancel</Button>
+                        </DialogClose>
+                        <Button type="submit">Save</Button>
+                    </DialogFooter>
+                </form>
             </DialogContent>
         </Dialog>
     );

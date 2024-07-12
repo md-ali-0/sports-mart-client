@@ -33,7 +33,7 @@ const AddProductDialog = () => {
             toast.error('Something Went Wrong');
         } else if (isSuccess) {
             toast.success("Product Added successfully");
-            reset(); // Reset form fields after successful submission
+            reset();
         }
     }, [isError, isSuccess, error, reset]);
 
@@ -44,13 +44,10 @@ const AddProductDialog = () => {
         Object.keys(data).forEach(key => {
             formData.append(key, (data as any)[key]);
         });
-
-        // Convert the 'image' field to file type
+        
         if (data.image[0]) {
             formData.append("image", data.image[0]);
         }
-
-        console.log("Adding product:", data);
         await addProduct(formData);
         setAddDialogOpen(false);
     };
@@ -69,38 +66,47 @@ const AddProductDialog = () => {
                         {...register("name")}
                         name="name"
                         placeholder="Enter product name"
+                        required
                     />
                     <Input
                         {...register("image")}
                         name="image"
                         type="file"
+                        required
                     />
                     <Textarea
                         {...register("description")}
                         name="description"
                         placeholder="Enter product description"
                         className="col-span-2"
+                        required
                     />
                     <Input
                         {...register("price")}
                         name="price"
                         type="number"
                         placeholder="Enter product price"
+                        required
                     />
                     <Input
                         {...register("stock")}
                         name="stock"
                         type="number"
                         placeholder="Enter product stock"
+                        required
                     />
                     <Controller
                         name="category"
                         control={control}
                         defaultValue=""
+                        rules={{
+                            required: true,
+                          }}
                         render={({ field }) => (
                             <Select
                                 defaultValue={field.value}
                                 onValueChange={field.onChange}
+                                
                             >
                                 <SelectTrigger>
                                     <SelectValue placeholder="Select category" />
@@ -122,10 +128,14 @@ const AddProductDialog = () => {
                         name="brand"
                         control={control}
                         defaultValue=""
+                        rules={{
+                            required: true,
+                          }}
                         render={({ field }) => (
                             <Select
                                 defaultValue={field.value}
                                 onValueChange={field.onChange}
+                                
                             >
                                 <SelectTrigger>
                                     <SelectValue placeholder="Select Brand" />

@@ -24,20 +24,21 @@ const productsApi = baseApi.injectEndpoints({
         }),
         updateProduct: builder.mutation({
             query: (data) => {
+                console.log(data);
+                
                 return {
-                    url: "/product",
+                    url: `/product/${data.id}`,
                     method: "PUT",
-                    body: data,
+                    body: data.data,
                 };
             },
             invalidatesTags: ["products"],
         }),
         deleteProduct: builder.mutation({
-            query: (data) => {
+            query: (id) => {
                 return {
-                    url: "/product",
-                    method: "DELETE",
-                    body: data,
+                    url: `/product/${id}`,
+                    method: "DELETE"
                 };
             },
             invalidatesTags: ["products"],
