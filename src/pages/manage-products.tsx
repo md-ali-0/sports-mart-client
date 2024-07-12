@@ -195,8 +195,8 @@ const ManageProducts = () => {
             header: "Category",
         },
         {
-            accessorKey: "Brand",
-            header: ({ column }) => <DataTableColumnHeader column={column} title="Brand"/>
+            accessorKey: "brand",
+            header: "Brand"
         },
         {
             accessorKey: "action",
