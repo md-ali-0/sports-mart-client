@@ -41,7 +41,7 @@ const EditProductDialog = ({
             stock: 0,
             category: "",
             brand: "",
-            image: "",
+            image: undefined,
         },
     });
 
@@ -69,10 +69,7 @@ const EditProductDialog = ({
             }
         );
     }, [product, reset]);
-
-    console.log(product);
     
-
     const onSubmit = async (data: IProduct) => {
         const formData = new FormData();
         formData.append("name", data.name);
@@ -81,7 +78,8 @@ const EditProductDialog = ({
         formData.append("stock", String(data.stock));
         formData.append("category", data.category);
         formData.append("brand", data.brand);
-        if (Array.isArray(data.image)) {
+        
+        if (data.image instanceof FileList && data.image.length > 0) {
             formData.append("image", data.image[0]);
         }
 
