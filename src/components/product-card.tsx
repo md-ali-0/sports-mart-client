@@ -2,11 +2,17 @@
 //     Rating,
 //     Star
 // } from "@smastrom/react-rating";
+import { IProduct } from "@/interface/IProduct";
+import { FC } from "react";
 import { LuStar } from "react-icons/lu";
 import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
 
-const ProductCard = ({ product }) => {
+interface Product {
+    product: IProduct;
+}
+
+const ProductCard: FC<Product> = ({ product }) => {
     return (
         <div className="rounded-lg overflow-hidden border p-2.5">
             <img
@@ -32,7 +38,7 @@ const ProductCard = ({ product }) => {
                             style={{width: "120px"}}
                             readOnly
                         /> */}
-                        <span>{product.rating.toFixed(1)}</span>
+                        <span>{product?.rating ? product.rating.toFixed(1) : ""}</span>
                     </div>
                     <span className="text-muted-foreground text-sm ml-2">
                         ({product.category})

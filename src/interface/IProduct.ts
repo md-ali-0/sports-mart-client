@@ -1,9 +1,11 @@
 export interface IProduct {
-    id: string | number;
+    _id: string;
     name: string;
+    image?: string;
     description: string;
     price: number;
+    rating?: number,
     stock: number;
     category: string;
-    status: "pending" | "processing" | "success" | "failed" | string;
+    brand: string;
 }

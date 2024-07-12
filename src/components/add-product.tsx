@@ -24,13 +24,13 @@ const AddProductDialog = () => {
     const [addDialogOpen, setAddDialogOpen] = useState(false);
 
     const [newProduct, setNewProduct] = useState<IProduct>({
-        id: Math.floor(Math.random() * 1000), // Temporary ID
+        _id: Math.floor(Math.random() * 1000).toString(), // Temporary ID
         name: "",
         description: "",
         price: 0,
         stock: 0,
         category: "Electronics",
-        status: "Active",
+        brand: "Active",
     });
 
     const handleInputChange = (
@@ -109,13 +109,12 @@ const AddProductDialog = () => {
                         </SelectContent>
                     </Select>
                     <Select
-                        defaultValue={newProduct.status}
                         onValueChange={(value) =>
-                            handleSelectChange("status", value)
+                            handleSelectChange("brand", value)
                         }
                     >
                         <SelectTrigger>
-                            <SelectValue placeholder="Select status" />
+                            <SelectValue placeholder="Select Brand" />
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="Active">Active</SelectItem>

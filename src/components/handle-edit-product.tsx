@@ -95,8 +95,9 @@ const EditProductDialog = ({ product, open, onClose, onSave }: EditProductDialog
                         </SelectContent>
                     </Select>
                     <Select
-                        defaultValue={product?.status}
-                        onValueChange={(value) => handleSelectChange("status", value)}
+                        onValueChange={(value) =>
+                            handleSelectChange("brand", value)
+                        }
                     >
                         <SelectTrigger>
                             <SelectValue placeholder="Select status" />

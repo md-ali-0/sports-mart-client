@@ -18,18 +18,9 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
+import { IProduct } from "@/interface/IProduct";
 import { ChangeEvent, useMemo, useState } from "react";
 import { LuFilter, LuListOrdered, LuSearch } from "react-icons/lu";
-
-interface Product {
-    id: number;
-    name: string;
-    category: string;
-    price: number;
-    brand: string;
-    rating: number;
-    image: string;
-}
 
 interface Filters {
     category: string[];
@@ -49,96 +40,116 @@ const AllProducts = () => {
     const [currentPage, setCurrentPage] = useState<number>(1);
     const productsPerPage = 6;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    const products: Product[] = [
+    const products: IProduct[] = [
         {
-            id: 1,
+            _id: "",
             name: "Basketball Hoop",
             category: "Basketball",
             price: 299.99,
             brand: "Spalding",
             rating: 3.8,
             image: "/placeholder.svg",
+            description: "",
+            stock: 0
         },
         {
-            id: 2,
+            _id: "",
             name: "Running Shoes",
             category: "Running",
             price: 79.99,
             brand: "Nike",
             rating: 5,
             image: "/placeholder.svg",
+            description: "",
+            stock: 0
         },
         {
-            id: 3,
+            _id: "",
             name: "Football Helmet",
             category: "Football",
             price: 149.99,
             brand: "Riddell",
             rating: 4,
             image: "/placeholder.svg",
+            description: "",
+            stock: 0
         },
         {
-            id: 4,
+            _id: "",
             name: "Yoga Mat",
             category: "Yoga",
             price: 39.99,
             brand: "Manduka",
             rating: 3.7,
             image: "/placeholder.svg",
+            description: "",
+            stock: 0
         },
         {
-            id: 5,
+            _id: "",
             name: "Tennis Racket",
             category: "Tennis",
             price: 99.99,
             brand: "Wilson",
             rating: 3.9,
             image: "/placeholder.svg",
+            description: "",
+            stock: 0
         },
         {
-            id: 6,
+            _id: "",
             name: "Cycling Bike",
             category: "Cycling",
             price: 599.99,
             brand: "Schwinn",
             rating: 4.6,
             image: "/placeholder.svg",
+            description: "",
+            stock: 0
         },
         {
-            id: 7,
+            _id: "",
             name: "Golf Club",
             category: "Golf",
             price: 149.99,
             brand: "Callaway",
             rating: 4.1,
             image: "/placeholder.svg",
+            description: "",
+            stock: 0
         },
         {
-            id: 8,
+            _id: "",
             name: "Boxing Gloves",
             category: "Boxing",
             price: 49.99,
             brand: "Everlast",
             rating: 4.4,
             image: "/placeholder.svg",
+            description: "",
+            stock: 0
         },
         {
-            id: 9,
+            _id: "",
             name: "Hiking Backpack",
             category: "Hiking",
             price: 89.99,
             brand: "Osprey",
             rating: 4.3,
             image: "/placeholder.svg",
+            description: "",
+            stock: 0
         },
         {
-            id: 10,
+            _id: "",
             name: "Swimming Goggles",
             category: "Swimming",
             price: 19.99,
             brand: "Speedo",
             rating: 4.6,
             image: "/placeholder.svg",
+            description: "",
+            stock: 0
         },
     ];
 
@@ -572,7 +583,7 @@ const AllProducts = () => {
                 <div className="md:col-span-8 lg:col-span-9">
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
                         {paginatedProducts.map((product) => (
-                            <ProductCard key={product.id} product={product} />
+                            <ProductCard key={product._id} product={product} />
                         ))}
                     </div>
                 </div>
