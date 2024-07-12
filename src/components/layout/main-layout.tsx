@@ -6,7 +6,6 @@ import Navbar from "../navbar";
 
 const MainLayout: FC = () => {
     const location = useLocation();
-
     useEffect(() => {
         // back to top
         window.scrollTo(0, 0);

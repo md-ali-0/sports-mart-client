@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button } from "@/components/ui/button";
 import {
     Dialog,
@@ -18,119 +19,138 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { IProduct } from "@/interface/IProduct";
-import { useState } from "react";
+import { useCreateProductMutation } from "@/redux/features/products/productsApi";
+import { useEffect, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 const AddProductDialog = () => {
+    const { register, handleSubmit, control, reset } = useForm<IProduct>();
+    const [ addProduct, { isSuccess, isError, error} ] = useCreateProductMutation();
+
+    useEffect(() => {
+        if (isError) {
+            toast.error('Something Went Wrong');
+        } else if (isSuccess) {
+            toast.success("Product Added successfully");
+            reset(); // Reset form fields after successful submission
+        }
+    }, [isError, isSuccess, error, reset]);
+
     const [addDialogOpen, setAddDialogOpen] = useState(false);
 
-    const [newProduct, setNewProduct] = useState<IProduct>({
-        _id: Math.floor(Math.random() * 1000).toString(), // Temporary ID
-        name: "",
-        description: "",
-        price: 0,
-        stock: 0,
-        category: "Electronics",
-        brand: "Active",
-    });
-
-    const handleInputChange = (
-        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-    ) => {
-        setNewProduct({
-            ...newProduct,
-            [e.target.name]: e.target.value,
+    const handleAddProduct = async (data: IProduct) => {
+        const formData = new FormData();
+        Object.keys(data).forEach(key => {
+            formData.append(key, (data as any)[key]);
         });
-    };
 
-    const handleSelectChange = (name: string, value: string) => {
-        setNewProduct({
-            ...newProduct,
-            [name]: value,
-        });
-    };
-    const handleAddProduct = (product: IProduct) => {
-        console.log("Adding product:", product);
+        // Convert the 'image' field to file type
+        if (data.image[0]) {
+            formData.append("image", data.image[0]);
+        }
+
+        console.log("Adding product:", data);
+        await addProduct(formData);
         setAddDialogOpen(false);
     };
+
     return (
         <Dialog open={addDialogOpen} onOpenChange={setAddDialogOpen}>
             <DialogTrigger asChild>
                 <Button variant="default">Add Product</Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
+            <DialogContent className="sm:max-w-[550px]">
                 <DialogHeader>
                     <DialogTitle>Add Product</DialogTitle>
                 </DialogHeader>
-                <div className="space-y-4">
+                <form onSubmit={handleSubmit(handleAddProduct)} className="grid grid-cols-2 gap-4">
                     <Input
+                        {...register("name")}
                         name="name"
                         placeholder="Enter product name"
-                        value={newProduct.name}
-                        onChange={handleInputChange}
-                    />
-                    <Textarea
-                        name="description"
-                        placeholder="Enter product description"
-                        value={newProduct.description}
-                        onChange={handleInputChange}
                     />
                     <Input
+                        {...register("image")}
+                        name="image"
+                        type="file"
+                    />
+                    <Textarea
+                        {...register("description")}
+                        name="description"
+                        placeholder="Enter product description"
+                        className="col-span-2"
+                    />
+                    <Input
+                        {...register("price")}
                         name="price"
                         type="number"
                         placeholder="Enter product price"
-                        value={newProduct.price}
-                        onChange={handleInputChange}
                     />
                     <Input
+                        {...register("stock")}
                         name="stock"
                         type="number"
                         placeholder="Enter product stock"
-                        value={newProduct.stock}
-                        onChange={handleInputChange}
                     />
-                    <Select
-                        defaultValue={newProduct.category}
-                        onValueChange={(value) =>
-                            handleSelectChange("category", value)
-                        }
-                    >
-                        <SelectTrigger>
-                            <SelectValue placeholder="Select category" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="Electronics">
-                                Electronics
-                            </SelectItem>
-                            <SelectItem value="Apparel">Apparel</SelectItem>
-                            <SelectItem value="Home">Home</SelectItem>
-                            <SelectItem value="Accessories">
-                                Accessories
-                            </SelectItem>
-                        </SelectContent>
-                    </Select>
-                    <Select
-                        onValueChange={(value) =>
-                            handleSelectChange("brand", value)
-                        }
-                    >
-                        <SelectTrigger>
-                            <SelectValue placeholder="Select Brand" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="Active">Active</SelectItem>
-                            <SelectItem value="Draft">Draft</SelectItem>
-                            <SelectItem value="Archived">Archived</SelectItem>
-                        </SelectContent>
-                    </Select>
-                </div>
-                <DialogFooter>
-                    <DialogClose asChild>
-                        <Button variant="outline">Cancel</Button>
-                    </DialogClose>
-                    <Button onClick={() => handleAddProduct(newProduct)}>
-                        Add
-                    </Button>
-                </DialogFooter>
+                    <Controller
+                        name="category"
+                        control={control}
+                        defaultValue=""
+                        render={({ field }) => (
+                            <Select
+                                defaultValue={field.value}
+                                onValueChange={field.onChange}
+                            >
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Select category" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="basketball">Basketball</SelectItem>
+                                    <SelectItem value="fitness">Fitness</SelectItem>
+                                    <SelectItem value="golf">Golf</SelectItem>
+                                    <SelectItem value="yoga">Yoga</SelectItem>
+                                    <SelectItem value="football">Football</SelectItem>
+                                    <SelectItem value="tennis">Tennis</SelectItem>
+                                    <SelectItem value="Swimming">Swimming</SelectItem>
+                                    <SelectItem value="Hiking">Hiking</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        )}
+                    />
+                    <Controller
+                        name="brand"
+                        control={control}
+                        defaultValue=""
+                        render={({ field }) => (
+                            <Select
+                                defaultValue={field.value}
+                                onValueChange={field.onChange}
+                            >
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Select Brand" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="nike">Nike</SelectItem>
+                                    <SelectItem value="adidas">Adidas</SelectItem>
+                                    <SelectItem value="under-armour">Under Armour</SelectItem>
+                                    <SelectItem value="puma">Puma</SelectItem>
+                                    <SelectItem value="reebok">Reebok</SelectItem>
+                                    <SelectItem value="wilson">Schwinn</SelectItem>
+                                    <SelectItem value="columbia">Columbia</SelectItem>
+                                    <SelectItem value="schwinn">Schwinn</SelectItem>
+                                    <SelectItem value="mizuno">Mizuno</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        )}
+                    />
+                    <DialogFooter className="col-span-2 flex justify-end">
+                        <DialogClose asChild>
+                            <Button variant="outline">Cancel</Button>
+                        </DialogClose>
+                        <Button type="submit">Add</Button>
+                    </DialogFooter>
+                </form>
             </DialogContent>
         </Dialog>
     );

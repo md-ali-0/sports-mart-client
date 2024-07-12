@@ -5,13 +5,15 @@ const productsApi = baseApi.injectEndpoints({
         getAllProducts: builder.query({
             query: () => {
                 return {
-                    url: "/product/all",
+                    url: "/product",
                 };
             },
             providesTags: ["products"],
         }),
         createProduct: builder.mutation({
+            
             query: (data) => {
+                console.log(data);
                 return {
                     url: "/product",
                     method: "POST",
