@@ -25,7 +25,7 @@ const ManageProducts = () => {
     );
 
     const { data, isError, isLoading, isSuccess, error } =
-        useGetAllProductsQuery("");
+        useGetAllProductsQuery({});
 
     useEffect(() => {
         if (isError) {
@@ -110,7 +110,7 @@ const ManageProducts = () => {
 
     return (
         <div className="container mx-auto py-10">
-            <DataTable columns={columns} data={data.data} />
+            <DataTable columns={columns} data={data?.data} />
             <EditProductDialog
                 product={productToEdit}
                 open={editDialogOpen}
