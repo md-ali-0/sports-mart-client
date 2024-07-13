@@ -18,6 +18,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { IProduct } from "@/interface/IProduct";
 import { useUpdateProductMutation } from "@/redux/features/products/productsApi";
+import { ImageUpload } from "@/utils/image-upload";
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -52,9 +53,9 @@ const EditProductDialog = ({
         if (isError) {
             toast.error("Something Went Wrong");
         } else if (isSuccess) {
-            toast.success("Product Updated successfully");
+            reset()
         }
-    }, [isError, isSuccess, error]);
+    }, [isError, isSuccess, error, reset]);
 
     useEffect(() => {
         reset(
@@ -71,22 +72,24 @@ const EditProductDialog = ({
     }, [product, reset]);
     
     const onSubmit = async (data: IProduct) => {
-        const formData = new FormData();
-        formData.append("name", data.name);
-        formData.append("description", data.description);
-        formData.append("price", String(data.price));
-        formData.append("stock", String(data.stock));
-        formData.append("category", data.category);
-        formData.append("brand", data.brand);
-        
-        if (data.image instanceof FileList && data.image.length > 0) {
-            formData.append("image", data.image[0]);
+
+        const loadingToast = toast.loading("Product is Updating...");
+        let productData: Partial<IProduct> = { ...data };
+        if (data.image[0]) {
+            const imageURL = await ImageUpload(data.image[0]);
+            if (imageURL) {
+                productData = {
+                    ...productData,
+                    image: imageURL,
+                };
+            }
         }
 
         if (product) {
-            await updateProduct({ data: formData, id: product._id });
+            await updateProduct({ productData, id: product._id });
         }
         onClose();
+        toast.success("Product Added successfully", { id: loadingToast });
     };
 
     return (

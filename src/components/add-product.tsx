@@ -1,5 +1,10 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { Button } from "@/components/ui/button";
+import { IProduct } from "@/interface/IProduct";
+import { useCreateProductMutation } from "@/redux/features/products/productsApi";
+import { ImageUpload } from "@/utils/image-upload";
+import { useEffect, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { Button } from "./ui/button";
 import {
     Dialog,
     DialogClose,
@@ -8,31 +13,26 @@ import {
     DialogHeader,
     DialogTitle,
     DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
+} from "./ui/dialog";
+import { Input } from "./ui/input";
 import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-import { IProduct } from "@/interface/IProduct";
-import { useCreateProductMutation } from "@/redux/features/products/productsApi";
-import { useEffect, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
-import { toast } from "sonner";
+} from "./ui/select";
+import { Textarea } from "./ui/textarea";
 
 const AddProductDialog = () => {
     const { register, handleSubmit, control, reset } = useForm<IProduct>();
-    const [ addProduct, { isSuccess, isError, error} ] = useCreateProductMutation();
+    const [addProduct, { isSuccess, isError, error }] =
+        useCreateProductMutation();
 
     useEffect(() => {
         if (isError) {
-            toast.error('Something Went Wrong');
+            toast.error("Something Went Wrong");
         } else if (isSuccess) {
-            toast.success("Product Added successfully");
             reset();
         }
     }, [isError, isSuccess, error, reset]);
@@ -40,16 +40,26 @@ const AddProductDialog = () => {
     const [addDialogOpen, setAddDialogOpen] = useState(false);
 
     const handleAddProduct = async (data: IProduct) => {
-        const formData = new FormData();
-        Object.keys(data).forEach(key => {
-            formData.append(key, (data as any)[key]);
-        });
-        
-        if (data.image[0]) {
-            formData.append("image", data.image[0]);
+        try {
+            const loadingToast = toast.loading("Product is Uploading...");
+            let productData: Partial<IProduct> = { ...data };
+            if (data.image[0]) {
+                const imageURL = await ImageUpload(data.image[0]);
+                if (imageURL) {
+                    productData = {
+                        ...productData,
+                        image: imageURL,
+                    };
+                }
+            }
+
+            await addProduct(productData);
+            setAddDialogOpen(false);
+            toast.success("Product Added successfully", { id: loadingToast });
+        } catch (error) {
+            console.error("Error adding product:", error);
+            toast.error("Failed to add product");
         }
-        await addProduct(formData);
-        setAddDialogOpen(false);
     };
 
     return (
@@ -61,7 +71,10 @@ const AddProductDialog = () => {
                 <DialogHeader>
                     <DialogTitle>Add Product</DialogTitle>
                 </DialogHeader>
-                <form onSubmit={handleSubmit(handleAddProduct)} className="grid grid-cols-2 gap-4">
+                <form
+                    onSubmit={handleSubmit(handleAddProduct)}
+                    className="grid grid-cols-2 gap-4"
+                >
                     <Input
                         {...register("name")}
                         name="name"
@@ -101,25 +114,36 @@ const AddProductDialog = () => {
                         defaultValue=""
                         rules={{
                             required: true,
-                          }}
+                        }}
                         render={({ field }) => (
                             <Select
                                 defaultValue={field.value}
                                 onValueChange={field.onChange}
-                                
                             >
                                 <SelectTrigger>
                                     <SelectValue placeholder="Select category" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="basketball">Basketball</SelectItem>
-                                    <SelectItem value="fitness">Fitness</SelectItem>
+                                    <SelectItem value="basketball">
+                                        Basketball
+                                    </SelectItem>
+                                    <SelectItem value="fitness">
+                                        Fitness
+                                    </SelectItem>
                                     <SelectItem value="golf">Golf</SelectItem>
                                     <SelectItem value="yoga">Yoga</SelectItem>
-                                    <SelectItem value="football">Football</SelectItem>
-                                    <SelectItem value="tennis">Tennis</SelectItem>
-                                    <SelectItem value="Swimming">Swimming</SelectItem>
-                                    <SelectItem value="Hiking">Hiking</SelectItem>
+                                    <SelectItem value="football">
+                                        Football
+                                    </SelectItem>
+                                    <SelectItem value="tennis">
+                                        Tennis
+                                    </SelectItem>
+                                    <SelectItem value="Swimming">
+                                        Swimming
+                                    </SelectItem>
+                                    <SelectItem value="Hiking">
+                                        Hiking
+                                    </SelectItem>
                                 </SelectContent>
                             </Select>
                         )}
@@ -130,26 +154,39 @@ const AddProductDialog = () => {
                         defaultValue=""
                         rules={{
                             required: true,
-                          }}
+                        }}
                         render={({ field }) => (
                             <Select
                                 defaultValue={field.value}
                                 onValueChange={field.onChange}
-                                
                             >
                                 <SelectTrigger>
                                     <SelectValue placeholder="Select Brand" />
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectItem value="nike">Nike</SelectItem>
-                                    <SelectItem value="adidas">Adidas</SelectItem>
-                                    <SelectItem value="under-armour">Under Armour</SelectItem>
+                                    <SelectItem value="adidas">
+                                        Adidas
+                                    </SelectItem>
+                                    <SelectItem value="under-armour">
+                                        Under Armour
+                                    </SelectItem>
                                     <SelectItem value="puma">Puma</SelectItem>
-                                    <SelectItem value="reebok">Reebok</SelectItem>
-                                    <SelectItem value="wilson">Schwinn</SelectItem>
-                                    <SelectItem value="columbia">Columbia</SelectItem>
-                                    <SelectItem value="schwinn">Schwinn</SelectItem>
-                                    <SelectItem value="mizuno">Mizuno</SelectItem>
+                                    <SelectItem value="reebok">
+                                        Reebok
+                                    </SelectItem>
+                                    <SelectItem value="wilson">
+                                        Schwinn
+                                    </SelectItem>
+                                    <SelectItem value="columbia">
+                                        Columbia
+                                    </SelectItem>
+                                    <SelectItem value="schwinn">
+                                        Schwinn
+                                    </SelectItem>
+                                    <SelectItem value="mizuno">
+                                        Mizuno
+                                    </SelectItem>
                                 </SelectContent>
                             </Select>
                         )}
