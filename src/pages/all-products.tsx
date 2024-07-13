@@ -2,6 +2,7 @@ import BrandFilter from "@/components/brand-filter";
 import CategoryFilter from "@/components/category-filter";
 import Loading from "@/components/loading";
 import Pagination from "@/components/pagination-all-products";
+import PriceFilter from "@/components/price-filter";
 import ProductCard from "@/components/product-card";
 import RatingFilter from "@/components/rating-filter";
 import { Button } from "@/components/ui/button";
@@ -28,6 +29,8 @@ const AllProducts = () => {
     const [searchTerm, setSearchTerm] = useState<string>("");
     const [category, setCategory] = useState<string | undefined>(categoryParams || undefined);
     const [brand, setBrand] = useState<string | undefined>(undefined);
+    const [minPrice, setMinPrice] = useState<number | undefined>(undefined);
+    const [maxPrice, setMaxPrice] = useState<number | undefined>(undefined);
     const [showFilter, setShowFilter] = useState<boolean>(false);
     const [rating, setRating] = useState<number | undefined>(undefined);
     const [currentPage, setCurrentPage] = useState(1);
@@ -77,10 +80,21 @@ const AllProducts = () => {
         } else setRating(undefined);
     };
 
+    const handlePriceChange = (e: ChangeEvent<HTMLInputElement>, type: string) => {
+        if (type === "min") {
+            setMinPrice(e.target.value ? parseFloat(e.target.value) : undefined);
+        } else {
+            setMaxPrice(e.target.value ? parseFloat(e.target.value) : undefined);
+        }
+        setCurrentPage(1);
+    };
+
     const handleClearFilters = () => {
         setSearchTerm("");
         setCategory(undefined);
         setBrand(undefined);
+        setMinPrice(undefined);
+        setMaxPrice(undefined);
         setRating(undefined);
         setSort(undefined);
         setCurrentPage(1);
@@ -90,7 +104,17 @@ const AllProducts = () => {
         return <Loading/>
     }
 
-    const totalPages = Math.ceil(data.data.length / productsPerPage);
+    let filteredProducts = data?.data;
+
+    if (minPrice !== undefined) {
+        filteredProducts = filteredProducts.filter((product: IProduct) => product.price >= minPrice);
+    }
+
+    if (maxPrice !== undefined) {
+        filteredProducts = filteredProducts.filter((product: IProduct) => product.price <= maxPrice);
+    }
+
+    const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
 
     return (
         <div className="container mx-auto px-4 md:px-6 py-8">
@@ -156,7 +180,11 @@ const AllProducts = () => {
                             rating={rating}
                             handleRatingChange={handleRatingChange}
                         />
-
+                        <PriceFilter
+                            minPrice={minPrice}
+                            maxPrice={maxPrice}
+                            handlePriceChange={handlePriceChange}
+                        />
                         <div className="flex justify-end gap-2">
                             <Button
                                 variant="outline"
@@ -169,7 +197,7 @@ const AllProducts = () => {
                 </div>
                 <div className="md:col-span-8 lg:col-span-9">
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                        {data?.data.map((product: IProduct) => (
+                        {filteredProducts.map((product: IProduct) => (
                             <ProductCard key={product._id} product={product} />
                         ))}
                     </div>
