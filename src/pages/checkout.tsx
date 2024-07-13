@@ -2,29 +2,42 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { FormEvent } from "react";
+import { clearCart } from "@/redux/features/cart/cartSlice";
+
+import { SubmitHandler, useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
+interface CheckoutFormValues {
+    name: string;
+    email: string;
+    phone: string;
+    address: string;
+    additional: string;
+    paymentMethod: string;
+}
+
 const Checkout = () => {
-    const onSubmit = (e: FormEvent<HTMLElement>)=>{
-        e.preventDefault()
-        toast.success('Payment Successful')
-    }
+    const { register, handleSubmit, formState: { errors } } = useForm<CheckoutFormValues>();
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    const onSubmit: SubmitHandler<CheckoutFormValues> = (data) => {
+        console.log(data);
+        toast.success("Payment Successful");
+        dispatch(clearCart());
+        navigate("/thank-you");
+    };
+
     return (
         <section className="py-8 antialiased">
             <div className="mx-auto max-w-7xl px-4 lg:px-0">
                 <h2 className="text-xl font-semibold text-gray-900 sm:text-2xl">
                     Checkout
                 </h2>
-                <form onSubmit={onSubmit}>
+                <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="mt-6 sm:mt-8 lg:flex lg:items-start lg:gap-12 xl:gap-16">
                         <div className="min-w-0 flex-1 space-y-8">
                             <div className="space-y-4">
@@ -34,7 +47,7 @@ const Checkout = () => {
                                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                                     <div>
                                         <label
-                                            htmlFor="your_name"
+                                            htmlFor="name"
                                             className="mb-2 block text-sm font-medium text-gray-900"
                                         >
                                             Your name
@@ -42,11 +55,13 @@ const Checkout = () => {
                                         <Input
                                             type="text"
                                             placeholder="Enter Your Name"
+                                            {...register("name", { required: true })}
                                         />
+                                        {errors.name && <p className="text-red-500">Name is required</p>}
                                     </div>
                                     <div>
                                         <label
-                                            htmlFor="your_email"
+                                            htmlFor="email"
                                             className="mb-2 block text-sm font-medium text-gray-900"
                                         >
                                             Your email
@@ -54,82 +69,49 @@ const Checkout = () => {
                                         <Input
                                             type="email"
                                             placeholder="name@email.com"
+                                            {...register("email", { required: true })}
                                         />
+                                        {errors.email && <p className="text-red-500">Email is required</p>}
                                     </div>
                                     <div>
-                                        <div className="mb-2 flex items-center gap-2">
-                                            <label
-                                                htmlFor="select-country-input-3"
-                                                className="block text-sm font-medium text-gray-900"
-                                            >
-                                                Country
-                                            </label>
-                                        </div>
-                                        <Select>
-                                            <SelectTrigger className="w-full">
-                                                <SelectValue placeholder="Select Country" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                <SelectItem value="United States">
-                                                    United States
-                                                </SelectItem>
-                                                <SelectItem value="Australia">
-                                                    Australia
-                                                </SelectItem>
-                                                <SelectItem value="France">
-                                                    France
-                                                </SelectItem>
-                                                <SelectItem value="Spain">
-                                                    Spain
-                                                </SelectItem>
-                                                <SelectItem value="United Kingdom">
-                                                    United Kingdom
-                                                </SelectItem>
-                                            </SelectContent>
-                                        </Select>
+                                        <label
+                                            htmlFor="phone"
+                                            className="mb-2 block text-sm font-medium text-gray-900"
+                                        >
+                                            Your Phone
+                                        </label>
+                                        <Input
+                                            type="phone"
+                                            placeholder="+880 19-00000000"
+                                            {...register("phone", { required: true })}
+                                        />
+                                        {errors.phone && <p className="text-red-500">Phone number is required</p>}
                                     </div>
                                     <div>
-                                        <div className="mb-2 flex items-center gap-2">
-                                            <label
-                                                htmlFor="select-city-input-3"
-                                                className="block text-sm font-medium text-gray-900"
-                                            >
-                                                City
-                                            </label>
-                                        </div>
-                                        <Select>
-                                            <SelectTrigger className="w-full">
-                                                <SelectValue placeholder="Select City" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                <SelectItem value="San Francisco">
-                                                    San Francisco
-                                                </SelectItem>
-                                                <SelectItem value="New York">
-                                                    New York
-                                                </SelectItem>
-                                                <SelectItem value="Los Angeles">
-                                                    Los Angeles
-                                                </SelectItem>
-                                                <SelectItem value="Chicago">
-                                                    Chicago
-                                                </SelectItem>
-                                                <SelectItem value="Houston">
-                                                    Houston
-                                                </SelectItem>
-                                            </SelectContent>
-                                        </Select>
+                                        <label
+                                            htmlFor="address"
+                                            className="mb-2 block text-sm font-medium text-gray-900"
+                                        >
+                                            Your Address
+                                        </label>
+                                        <Input
+                                            type="text"
+                                            placeholder="Enter your Address"
+                                            {...register("address", { required: true })}
+                                        />
+                                        {errors.address && <p className="text-red-500">Address is required</p>}
                                     </div>
                                     <div className="col-span-2">
                                         <label
-                                            htmlFor="email"
+                                            htmlFor="additional"
                                             className="mb-2 block text-sm font-medium text-gray-900"
                                         >
-                                            Additional Information
+                                            Additional Information <span className="text-slate-600 font-normal">(optional)</span>
                                         </label>
                                         <Textarea
                                             rows={5}
                                             placeholder="Type your message here."
+                                            {...register("additional")}
                                         />
                                     </div>
                                 </div>
@@ -140,44 +122,31 @@ const Checkout = () => {
                                 <h3 className="text-xl font-semibold text-gray-900">
                                     Payment
                                 </h3>
-                                <RadioGroup
-                                    defaultValue="option-one"
-                                    className="grid grid-cols-1 gap-4 md:grid-cols-2"
-                                >
-                                    <div className="rounded-lg border  p-4 px-4">
+                                <RadioGroup className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                                    <div className="rounded-lg border p-4 px-4">
                                         <div className="flex gap-2">
                                             <RadioGroupItem
-                                                value="option-one"
-                                                id="option-one"
-                                                className="cursor-pointer"
-                                            />
-                                            <Label htmlFor="option-one" className="cursor-pointer">
-                                                Credit Card
-                                            </Label>
-                                        </div>
-                                        <p className="mt-1 text-xs font-normal text-gray-500">
-                                            Pay with your credit card
-                                        </p>
-                                    </div>
-                                    <div className="rounded-lg border  p-4 px-4">
-                                        <div className="flex gap-2">
-                                            <RadioGroupItem
-                                                value="option-two"
+                                                value="Cash on Delivery"
                                                 id="option-two"
                                                 className="cursor-pointer"
+                                                {...register("paymentMethod", { required: true })}
                                             />
-                                            <Label htmlFor="option-two" className="cursor-pointer">
-                                                Payment on delivery
+                                            <Label
+                                                htmlFor="option-two"
+                                                className="cursor-pointer"
+                                            >
+                                                Cash on Delivery
                                             </Label>
                                         </div>
                                         <p className="mt-1 text-xs font-normal text-gray-500">
-                                            +$15 payment processing fee
+                                            +$0 payment processing fee
                                         </p>
                                     </div>
                                 </RadioGroup>
+                                {errors.paymentMethod && <p className="text-red-500">Payment method is required</p>}
                             </div>
                             <div className="space-y-3">
-                                <Button variant={"default"} className="w-full">
+                                <Button variant={"default"} className="w-full" type="submit">
                                     Proceed to Payment
                                 </Button>
                             </div>
