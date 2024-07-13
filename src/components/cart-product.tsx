@@ -1,15 +1,24 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import config from "@/config";
-import { CartProduct as ICartProduct } from "@/redux/features/cart/cartSlice";
+import {
+    CartProduct as ICartProduct,
+    removeProduct,
+} from "@/redux/features/cart/cartSlice";
+import { useAppDispatch } from "@/redux/hooks";
 import { FC } from "react";
 import { LuX } from "react-icons/lu";
 
 interface CartProductProps {
-    product: ICartProduct
+    product: ICartProduct;
 }
 
-const CartProduct : FC<CartProductProps> = ({product}) => {
+const CartProduct: FC<CartProductProps> = ({ product }) => {
+    const dispatch = useAppDispatch();
+
+    const deleteCartProduct = () => {
+        dispatch(removeProduct(product.id));
+    };
     return (
         <div className="rounded-lg border  p-4 md:p-6">
             <div className="space-y-4 md:flex md:items-center md:justify-between md:gap-6 md:space-y-0">
@@ -85,10 +94,11 @@ const CartProduct : FC<CartProductProps> = ({product}) => {
                     </a>
                     <div className="flex items-center gap-4">
                         <Button
+                            onClick={deleteCartProduct}
                             variant={"outline"}
                             className="inline-flex items-center text-sm font-medium text-red-600 hover:underline dark:text-red-500 gap-2"
                         >
-                            <LuX/>
+                            <LuX />
                             Remove
                         </Button>
                     </div>

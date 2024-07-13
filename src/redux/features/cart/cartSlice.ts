@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { toast } from "sonner";
 
 export interface CartProduct {
     id: string;
@@ -25,14 +26,20 @@ export const cartSlice = createSlice({
                 (product) => product.id === action.payload.id
             );
             if (existingProduct) {
-                existingProduct.quantity += action.payload.quantity;
+                // existingProduct.quantity += action.payload.quantity;
+                toast.error('Product Already Added to Cart')
             } else {
                 state.cart.push(action.payload);
+                toast.success('Product Added to Cart')
             }
         },
+        removeProduct : (state, action: PayloadAction<string>)=>{
+            const remainingProducts = state.cart.filter((product) => product.id !== action.payload)
+            state.cart = remainingProducts
+        }
     },
 });
 
-export const { addProduct } = cartSlice.actions
+export const { addProduct, removeProduct } = cartSlice.actions
 
 export default cartSlice.reducer;

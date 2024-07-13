@@ -5,8 +5,6 @@ import { useAppSelector } from "@/redux/hooks";
 
 const Cart = () => {
     const cartProducts = useAppSelector((state) => state.cart.cart);
-    console.log(cartProducts.length >= 0);
-
     return (
         <section className="py-8 antialiased">
             <div className="mx-auto max-w-screen-xl px-4 2xl:px-0">

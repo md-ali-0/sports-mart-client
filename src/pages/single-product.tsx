@@ -26,7 +26,6 @@ const SingleProduct = () => {
             price: data.data.price,
         }
         dispatch(addProduct(product))
-        toast.success('Product Added to Cart')
     }
 
     useEffect(() => {
