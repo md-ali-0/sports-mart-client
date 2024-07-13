@@ -2,7 +2,6 @@
 import Loading from "@/components/loading";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import config from "@/config";
 import { addProduct } from "@/redux/features/cart/cartSlice";
 import { useGetSingleProductQuery } from "@/redux/features/products/productsApi";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
@@ -56,14 +55,14 @@ const SingleProduct = () => {
                 <div className="grid gap-4 md:gap-10 items-start">
                     <div className="hidden md:flex items-start border rounded-lg">
                         <img
-                            src={`${config.host}/${data.data.image}`}
+                            src={data.data.image}
                             alt={data.data.name}
                             className="object-fill rounded-lg overflow-hidden h-96 w-auto mx-auto"
                         />
                     </div>
                     <div className="md:hidden">
                         <img
-                            src={`${config.host}/${data.data.image}`}
+                            src={data.data.image}
                             alt={data.data.name}
                             className="aspect-square object-cover border w-full rounded-lg overflow-hidden"
                         />

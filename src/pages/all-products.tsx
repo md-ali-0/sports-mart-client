@@ -18,15 +18,17 @@ import { IProduct } from "@/interface/IProduct";
 import { useGetAllProductsQuery } from "@/redux/features/products/productsApi";
 import { ChangeEvent, useEffect, useState } from "react";
 import { LuFilter, LuListOrdered, LuSearch } from "react-icons/lu";
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 
 const AllProducts = () => {
     const [searchParams] = useSearchParams();
-    const categoryParams = searchParams.get('category');
+    const categoryParams = searchParams.get("category");
 
     const [searchTerm, setSearchTerm] = useState<string>("");
-    const [category, setCategory] = useState<string | undefined>(categoryParams || undefined);
+    const [category, setCategory] = useState<string | undefined>(
+        categoryParams || undefined
+    );
     const [brand, setBrand] = useState<string | undefined>(undefined);
     const [minPrice, setMinPrice] = useState<number | undefined>(undefined);
     const [maxPrice, setMaxPrice] = useState<number | undefined>(undefined);
@@ -38,18 +40,21 @@ const AllProducts = () => {
 
     const query = {
         searchTerm,
+        // limit: productsPerPage,
         sort,
+        // page: currentPage,
         category,
         brand,
         rating,
-        minPrice,
-        maxPrice
     };
 
-    const { data, isError, isLoading, isSuccess, error } = useGetAllProductsQuery(query, { pollingInterval: 30000 });
+    const { data, isError, isLoading, isSuccess, error } =
+        useGetAllProductsQuery(query, { pollingInterval: 30000 });
 
     useEffect(() => {
         if (isError) {
+            console.log(error);
+
             toast.error("Something Went Wrong");
         }
     }, [isError, isSuccess, error]);
@@ -81,11 +86,18 @@ const AllProducts = () => {
         } else setRating(undefined);
     };
 
-    const handlePriceChange = (e: ChangeEvent<HTMLInputElement>, type: string) => {
+    const handlePriceChange = (
+        e: ChangeEvent<HTMLInputElement>,
+        type: string
+    ) => {
         if (type === "min") {
-            setMinPrice(e.target.value ? parseFloat(e.target.value) : undefined);
+            setMinPrice(
+                e.target.value ? parseFloat(e.target.value) : undefined
+            );
         } else {
-            setMaxPrice(e.target.value ? parseFloat(e.target.value) : undefined);
+            setMaxPrice(
+                e.target.value ? parseFloat(e.target.value) : undefined
+            );
         }
         setCurrentPage(1);
     };
@@ -108,16 +120,23 @@ const AllProducts = () => {
     let filteredProducts = data?.data || [];
 
     if (minPrice !== undefined) {
-        filteredProducts = filteredProducts.filter((product: IProduct) => product.price >= minPrice);
+        filteredProducts = filteredProducts.filter(
+            (product: IProduct) => product.price >= minPrice
+        );
     }
 
     if (maxPrice !== undefined) {
-        filteredProducts = filteredProducts.filter((product: IProduct) => product.price <= maxPrice);
+        filteredProducts = filteredProducts.filter(
+            (product: IProduct) => product.price <= maxPrice
+        );
     }
 
     const indexOfLastProduct = currentPage * productsPerPage;
     const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-    const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
+    const currentProducts = filteredProducts.slice(
+        indexOfFirstProduct,
+        indexOfLastProduct
+    );
 
     const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
 
@@ -202,9 +221,18 @@ const AllProducts = () => {
                 </div>
                 <div className="md:col-span-8 lg:col-span-9">
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                        {currentProducts.map((product: IProduct) => (
-                            <ProductCard key={product._id} product={product} />
-                        ))}
+                        {currentProducts.length > 0 ? (
+                            currentProducts.map((product: IProduct) => (
+                                <ProductCard
+                                    key={product._id}
+                                    product={product}
+                                />
+                            ))
+                        ) : (
+                            <div className="flex justify-center items-center py-5 col-span-1 sm:col-span-2 lg:col-span-3">
+                                <h3 className="text-xl">No Product Found</h3>
+                            </div>
+                        )}
                     </div>
                 </div>
                 <div className="md:col-span-12">

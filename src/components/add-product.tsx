@@ -138,10 +138,10 @@ const AddProductDialog = () => {
                                     <SelectItem value="tennis">
                                         Tennis
                                     </SelectItem>
-                                    <SelectItem value="Swimming">
+                                    <SelectItem value="swimming">
                                         Swimming
                                     </SelectItem>
-                                    <SelectItem value="Hiking">
+                                    <SelectItem value="hiking">
                                         Hiking
                                     </SelectItem>
                                 </SelectContent>
