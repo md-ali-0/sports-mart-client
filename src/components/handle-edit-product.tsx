@@ -19,7 +19,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { IProduct } from "@/interface/IProduct";
 import { useUpdateProductMutation } from "@/redux/features/products/productsApi";
 import { ImageUpload } from "@/utils/image-upload";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -53,7 +53,7 @@ const EditProductDialog = ({
         if (isError) {
             toast.error("Something Went Wrong");
         } else if (isSuccess) {
-            reset()
+            reset();
         }
     }, [isError, isSuccess, error, reset]);
 
@@ -70,26 +70,32 @@ const EditProductDialog = ({
             }
         );
     }, [product, reset]);
-    
-    const onSubmit = async (data: IProduct) => {
+    const [image, setImage] = useState<File | null>(null);
 
+    const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (event.target.files && event.target.files.length > 0) {
+            const selectedImage = event.target.files[0];
+            setImage(selectedImage);
+        }
+    };
+
+    const onSubmit = async (data: IProduct) => {
         const loadingToast = toast.loading("Product is Updating...");
-        let productData: Partial<IProduct> = { ...data };
-        if (data.image[0]) {
-            const imageURL = await ImageUpload(data.image[0]);
+
+        console.log(image);
+
+        if (image) {
+            const imageURL = await ImageUpload(image);
             if (imageURL) {
-                productData = {
-                    ...productData,
-                    image: imageURL,
-                };
+                data.image = imageURL;
             }
         }
 
         if (product) {
-            await updateProduct({ productData, id: product._id });
+            await updateProduct({ data, id: product._id });
         }
         onClose();
-        toast.success("Product Added successfully", { id: loadingToast });
+        toast.success("Product Updated successfully", { id: loadingToast });
     };
 
     return (
@@ -112,7 +118,7 @@ const EditProductDialog = ({
                         required
                     />
                     <Input
-                        {...register("image")}
+                        onChange={handleImageChange}
                         name="image"
                         type="file"
                     />
