@@ -1,9 +1,11 @@
 import logo from "@/assets/images/logo.png";
+import { useAppSelector } from "@/redux/hooks";
 import { useState } from "react";
 import { LuMenu, LuSearch, LuShoppingBag, LuX } from "react-icons/lu";
 import { Link, NavLink } from "react-router-dom";
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const cartProduct = useAppSelector(state=>state.cart.cart)
     return (
         <>
             <header className="container flex bg-white border-b py-4 sm:px-8 px-6 min-h-[80px] tracking-wide relative z-50">
@@ -92,7 +94,7 @@ const Navbar = () => {
                             <Link to={'/cart'} className="relative">
                                 <LuShoppingBag size={25} />
                                 <span className="absolute -right-1.5  -top-0.5 rounded-full bg-black px-1 py-0 text-xs text-white">
-                                    0
+                                    {cartProduct.length}
                                 </span>
                             </Link>
                             <button

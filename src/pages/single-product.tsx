@@ -2,7 +2,9 @@ import Loading from "@/components/loading";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import config from "@/config";
+import { addProduct } from "@/redux/features/cart/cartSlice";
 import { useGetSingleProductQuery } from "@/redux/features/products/productsApi";
+import { useAppDispatch } from "@/redux/hooks";
 import { Rating, Star } from "@smastrom/react-rating";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
@@ -13,6 +15,20 @@ const SingleProduct = () => {
     const { data, isError, isLoading, isSuccess, error } =
         useGetSingleProductQuery(id);
 
+    const dispatch = useAppDispatch()
+
+    const addToCart = async ()=>{
+        const product = {
+            id: data.data._id,
+            name: data.data.name,
+            image: data.data.image,
+            quantity: 1,
+            price: data.data.price,
+        }
+        dispatch(addProduct(product))
+        toast.success('Product Added to Cart')
+    }
+
     useEffect(() => {
         if (isError) {
             toast.error("Something Went Wrong");
@@ -22,6 +38,8 @@ const SingleProduct = () => {
     if (isLoading) {
         return <Loading />;
     }
+    
+
 
     return (
         <div className="container">
@@ -95,7 +113,7 @@ const SingleProduct = () => {
                                 ${data.data.price}
                             </div>
                             <div className="flex items-center gap-4 md:w-1/2">
-                                <Button size="lg" className="w-full" disabled={data.data.stock <=0 }>Add to Cart</Button>
+                                <Button onClick={addToCart} size="lg" className="w-full" disabled={data.data.stock <=0 }>Add to Cart</Button>
                             </div>
                         </div>
                     </div>
