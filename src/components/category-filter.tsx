@@ -3,7 +3,7 @@ import { Label } from "@/components/ui/label";
 import { FC } from "react";
 
 interface CategoryFilterProps {
-    category: string | undefined | null;
+    category: string | undefined;
     handleFilterChange: (checked: boolean | string, value: string) => void
 }
 

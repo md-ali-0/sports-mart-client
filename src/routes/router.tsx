@@ -6,6 +6,7 @@ import Checkout from "@/pages/checkout";
 import Home from "@/pages/home";
 import ManageProducts from "@/pages/manage-products";
 import SingleProduct from "@/pages/single-product";
+import Component from "@/pages/single-productss";
 import { createBrowserRouter } from "react-router-dom";
 
 const router = createBrowserRouter([
@@ -38,8 +39,12 @@ const router = createBrowserRouter([
                 element: <ManageProducts />,
             },
             {
-                path: "/product-details",
+                path: "/product-details/:id",
                 element: <SingleProduct />,
+            },
+            {
+                path: "/test",
+                element: <Component />,
             },
         ],
     },

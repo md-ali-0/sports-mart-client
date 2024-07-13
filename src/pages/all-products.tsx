@@ -26,7 +26,7 @@ const AllProducts = () => {
     const categoryParams = searchParams.get('category');
 
     const [searchTerm, setSearchTerm] = useState<string>("");
-    const [category, setCategory] = useState<string | undefined | null>(categoryParams);
+    const [category, setCategory] = useState<string | undefined>(categoryParams || undefined);
     const [brand, setBrand] = useState<string | undefined>(undefined);
     const [showFilter, setShowFilter] = useState<boolean>(false);
     const [rating, setRating] = useState<number | undefined>(undefined);

@@ -59,7 +59,7 @@ const ProductCard: FC<Product> = ({ product }) => {
                         ${product.price.toFixed(2)}
                     </span>
                     <Button size="sm" asChild>
-                        <Link to={"/product-details"}>View Details</Link>
+                        <Link to={`/product-details/${product._id}`}>View Details</Link>
                     </Button>
                 </div>
             </div>

@@ -1,6 +1,6 @@
 import logo from "@/assets/images/logo.png";
 import { useState } from "react";
-import { LuHeart, LuMenu, LuSearch, LuShoppingBag, LuX } from "react-icons/lu";
+import { LuMenu, LuSearch, LuShoppingBag, LuX } from "react-icons/lu";
 import { Link, NavLink } from "react-router-dom";
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -23,7 +23,7 @@ const Navbar = () => {
                         </button>
                         <ul className="lg:flex lg:gap-x-3 max-lg:space-y-3 max-lg:fixed max-lg:bg-white max-lg:w-1/2 max-lg:min-w-[300px] max-lg:top-0 max-lg:left-0 max-lg:p-6 max-lg:h-full max-lg:shadow-md max-lg:overflow-auto z-50">
                             <li className="mb-6 hidden max-lg:block">
-                                <Link to={"/"}>
+                                <Link to={"/"} onClick={() => setIsOpen(false)}>
                                     <img
                                         src={logo}
                                         alt="logo"
@@ -35,6 +35,7 @@ const Navbar = () => {
                                 <NavLink
                                     to="/"
                                     className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}
+                                    onClick={() => setIsOpen(false)}
                                 >
                                     Home
                                 </NavLink>
@@ -43,6 +44,7 @@ const Navbar = () => {
                                 <NavLink
                                     to="/all-products"
                                     className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}
+                                    onClick={() => setIsOpen(false)}
                                 >
                                     All Products
                                 </NavLink>
@@ -51,6 +53,7 @@ const Navbar = () => {
                                 <NavLink
                                     to="/manage-products"
                                     className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}
+                                    onClick={() => setIsOpen(false)}
                                 >
                                     Manage Products
                                 </NavLink>
@@ -59,6 +62,7 @@ const Navbar = () => {
                                 <NavLink
                                     to="/about-us"
                                     className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}
+                                    onClick={() => setIsOpen(false)}
                                 >
                                     About Us
                                 </NavLink>
@@ -79,12 +83,12 @@ const Navbar = () => {
                             />
                         </div>
                         <div className="flex items-center space-x-5">
-                            <Link to={'/wish-list'} className="relative">
+                            {/* <Link to={'/wish-list'} className="relative">
                                 <LuHeart size={25} />
                                 <span className="absolute -right-1.5  -top-0.5 rounded-full bg-black px-1 py-0 text-xs text-white">
                                     0
                                 </span>
-                            </Link>
+                            </Link> */}
                             <Link to={'/cart'} className="relative">
                                 <LuShoppingBag size={25} />
                                 <span className="absolute -right-1.5  -top-0.5 rounded-full bg-black px-1 py-0 text-xs text-white">
