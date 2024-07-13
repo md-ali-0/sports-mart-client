@@ -1,5 +1,4 @@
 import CartProduct from "@/components/cart-product";
-import Coupon from "@/components/coupon";
 import OrderSummery from "@/components/order-summery";
 import { useAppSelector } from "@/redux/hooks";
 
@@ -22,7 +21,6 @@ const Cart = () => {
                         </div>
                         <div className="mx-auto mt-6 max-w-4xl flex-1 space-y-6 lg:mt-0 lg:w-full">
                             <OrderSummery />
-                            <Coupon />
                         </div>
                     </div>
                 ) : (

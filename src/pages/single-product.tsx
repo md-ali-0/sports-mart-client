@@ -1,10 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Loading from "@/components/loading";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import config from "@/config";
 import { addProduct } from "@/redux/features/cart/cartSlice";
 import { useGetSingleProductQuery } from "@/redux/features/products/productsApi";
-import { useAppDispatch } from "@/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { RootState } from "@/redux/store";
 import { Rating, Star } from "@smastrom/react-rating";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -14,10 +16,11 @@ const SingleProduct = () => {
     const { id } = useParams();
     const { data, isError, isLoading, isSuccess, error } =
         useGetSingleProductQuery(id);
-    const [stock , setStock] = useState<number>(0)
-    const dispatch = useAppDispatch()
+    const [stock, setStock] = useState<number>(0);
+    const dispatch = useAppDispatch();
+    const cart = useAppSelector((state: RootState) => state.cart.cart);
 
-    const addToCart = async ()=>{
+    const addToCart = async () => {
         const product = {
             id: data.data._id,
             name: data.data.name,
@@ -25,21 +28,27 @@ const SingleProduct = () => {
             stock: data.data.stock,
             quantity: 1,
             price: data.data.price,
-        }
-        dispatch(addProduct(product))
-        setStock(stock - product.quantity)
-    }
+        };
+        dispatch(addProduct(product));
+        setStock(stock - product.quantity);
+    };
 
     useEffect(() => {
         if (isError) {
             toast.error("Something Went Wrong");
         }
-        setStock(data?.data?.stock)
+        setStock(data?.data?.stock);
     }, [isError, isSuccess, error, data]);
 
     if (isLoading) {
         return <Loading />;
     }
+    const productInCart = cart.find(
+        (item: { id: any }) => item.id === data.data._id
+    );
+    const availableStock = data.data
+        ? data.data.stock - (productInCart ? productInCart.quantity : 0)
+        : 0;
 
     return (
         <div className="container">
@@ -78,7 +87,8 @@ const SingleProduct = () => {
                                 readOnly
                             />
                             <div className="text-sm text-muted-foreground">
-                                {data.data.rating} (1 reviews)
+                                {data.data.rating} (
+                                {data.data.rating ? "1" : "0"} reviews)
                             </div>
                         </div>
                         <div className="grid gap-4 text-sm leading-loose">
@@ -93,7 +103,7 @@ const SingleProduct = () => {
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <div className="font-medium">Stock:</div>
-                                    <div>{stock}</div>
+                                    <div>{availableStock}</div>
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <div className="font-medium">
@@ -103,7 +113,7 @@ const SingleProduct = () => {
                                         variant="outline"
                                         className="rounded-full px-2 py-1"
                                     >
-                                        {stock > 0
+                                        {availableStock > 0
                                             ? " In Stock"
                                             : "Out of Stock"}
                                     </Badge>
@@ -117,7 +127,14 @@ const SingleProduct = () => {
                                 ${data.data.price}
                             </div>
                             <div className="flex items-center gap-4 md:w-1/2">
-                                <Button onClick={addToCart} size="lg" className="w-full" disabled={stock <= 0 }>Add to Cart</Button>
+                                <Button
+                                    onClick={addToCart}
+                                    size="lg"
+                                    className="w-full"
+                                    disabled={availableStock <= 0}
+                                >
+                                    Add to Cart
+                                </Button>
                             </div>
                         </div>
                     </div>
