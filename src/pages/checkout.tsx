@@ -4,6 +4,9 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
 import { clearCart } from "@/redux/features/cart/cartSlice";
+import { useCreateOrderMutation } from "@/redux/features/order/orderApi";
+import { useAppSelector } from "@/redux/hooks";
+import { useEffect } from "react";
 
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
@@ -23,10 +26,38 @@ const Checkout = () => {
     const { register, handleSubmit, formState: { errors } } = useForm<CheckoutFormValues>();
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const [ addOrder, { isSuccess, isError, error} ] = useCreateOrderMutation();
 
-    const onSubmit: SubmitHandler<CheckoutFormValues> = (data) => {
+    useEffect(() => {
+        if (isError) {
+            toast.error('Something Went Wrong');
+        } else if (isSuccess) {
+            toast.success("Product Added successfully");
+        }
+    }, [isError, isSuccess, error]);
+    const cart = useAppSelector(state=>state.cart.cart)
+    const totalPriceWithOutVat = cart.reduce(
+        (acc, item) => acc + item.price * item.quantity,
+        0
+    );
+    const vatRate = 0.15;
+    const vatAmount = totalPriceWithOutVat * vatRate;
+
+    const totalPriceWithVat = totalPriceWithOutVat + vatAmount;
+    const products = cart.map(product => product.id)
+    
+    const onSubmit: SubmitHandler<CheckoutFormValues> = async (data) => {
         console.log(data);
         toast.success("Payment Successful");
+        const order = {
+            name: data.name,
+            email: data.email,
+            phone: data.phone,
+            address: data.address,
+            totalPrice: totalPriceWithVat,
+            products: products
+        }
+        await addOrder(order)
         dispatch(clearCart());
         navigate("/thank-you");
     };
