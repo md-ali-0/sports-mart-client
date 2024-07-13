@@ -18,22 +18,22 @@ const ContactInformation = () => {
                             reach out to us at:
                         </p>
                         <div className="flex flex-col items-center space-y-6">
-                            <div className="flex items-center space-x-4">
-                                <Mail className="text-muted-foreground" size={24} />
-                                <p className="text-lg md:text-xl text-muted-foreground">
+                            <div className="flex items-center justify-center gap-2 md:gap-4">
+                                <Mail className="text-muted-foreground" size={20} />
+                                <p className="text-sm md:text-xl text-muted-foreground">
                                     Email: support@sportsmart.com
                                 </p>
                             </div>
-                            <div className="flex items-center space-x-4">
-                                <Phone className="text-muted-foreground" size={24} />
-                                <p className="text-lg md:text-xl text-muted-foreground">
+                            <div className="flex items-center justify-center gap-2 md:gap-4">
+                                <Phone className="text-muted-foreground" size={20} />
+                                <p className="text-sm md:text-xl text-muted-foreground">
                                     Phone: +1 (800) 123-4567
                                 </p>
                             </div>
-                            <div className="flex items-center space-x-4">
-                                <MapPin className="text-muted-foreground" size={24} />
-                                <p className="text-lg md:text-xl text-muted-foreground">
-                                    Address: 123 Sports Mart Lane, Sportstown, USA
+                            <div className="flex items-center justify-center gap-2 md:gap-4">
+                                <MapPin className="text-muted-foreground" size={20} />
+                                <p className="text-sm md:text-xl text-muted-foreground">
+                                    Address: 123 Sports Mart Lane, USA
                                 </p>
                             </div>
                         </div>
