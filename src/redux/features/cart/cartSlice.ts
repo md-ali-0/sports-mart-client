@@ -5,6 +5,7 @@ export interface CartProduct {
     id: string;
     name: string;
     image: string;
+    stock: number;
     quantity: number;
     price: number;
 }
@@ -26,8 +27,14 @@ export const cartSlice = createSlice({
                 (product) => product.id === action.payload.id
             );
             if (existingProduct) {
-                // existingProduct.quantity += action.payload.quantity;
-                toast.error('Product Already Added to Cart')
+                const updatedQuantity = existingProduct.quantity + action.payload.quantity;
+                if (updatedQuantity <= action.payload.stock) {
+                    existingProduct.quantity = updatedQuantity
+                    toast.success('Product Added to Cart')
+                } else {
+                    toast.error('Product is out of stock')
+                }
+
             } else {
                 state.cart.push(action.payload);
                 toast.success('Product Added to Cart')
@@ -36,10 +43,22 @@ export const cartSlice = createSlice({
         removeProduct : (state, action: PayloadAction<string>)=>{
             const remainingProducts = state.cart.filter((product) => product.id !== action.payload)
             state.cart = remainingProducts
-        }
+        },
+        incrementQuantity: (state, action: PayloadAction<string>) => {
+            const existingProduct = state.cart.find(product => product.id === action.payload);
+            if (existingProduct) {
+                existingProduct.quantity += 1;
+            }
+        },
+        decrementQuantity: (state, action: PayloadAction<string>) => {
+            const existingProduct = state.cart.find(product => product.id === action.payload);
+            if (existingProduct && existingProduct.quantity > 1) {
+                existingProduct.quantity -= 1;
+            }
+        },
     },
 });
 
-export const { addProduct, removeProduct } = cartSlice.actions
+export const { addProduct, removeProduct, incrementQuantity, decrementQuantity } = cartSlice.actions
 
 export default cartSlice.reducer;

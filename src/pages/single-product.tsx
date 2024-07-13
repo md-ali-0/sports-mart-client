@@ -6,7 +6,7 @@ import { addProduct } from "@/redux/features/cart/cartSlice";
 import { useGetSingleProductQuery } from "@/redux/features/products/productsApi";
 import { useAppDispatch } from "@/redux/hooks";
 import { Rating, Star } from "@smastrom/react-rating";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -14,7 +14,7 @@ const SingleProduct = () => {
     const { id } = useParams();
     const { data, isError, isLoading, isSuccess, error } =
         useGetSingleProductQuery(id);
-
+    const [stock , setStock] = useState<number>(0)
     const dispatch = useAppDispatch()
 
     const addToCart = async ()=>{
@@ -22,23 +22,24 @@ const SingleProduct = () => {
             id: data.data._id,
             name: data.data.name,
             image: data.data.image,
+            stock: data.data.stock,
             quantity: 1,
             price: data.data.price,
         }
         dispatch(addProduct(product))
+        setStock(stock - product.quantity)
     }
 
     useEffect(() => {
         if (isError) {
             toast.error("Something Went Wrong");
         }
-    }, [isError, isSuccess, error]);
+        setStock(data?.data?.stock)
+    }, [isError, isSuccess, error, data]);
 
     if (isLoading) {
         return <Loading />;
     }
-    
-
 
     return (
         <div className="container">
@@ -91,6 +92,10 @@ const SingleProduct = () => {
                                     <div>{data.data.brand}</div>
                                 </div>
                                 <div className="flex items-center gap-2">
+                                    <div className="font-medium">Stock:</div>
+                                    <div>{stock}</div>
+                                </div>
+                                <div className="flex items-center gap-2">
                                     <div className="font-medium">
                                         Availability:
                                     </div>
@@ -98,7 +103,7 @@ const SingleProduct = () => {
                                         variant="outline"
                                         className="rounded-full px-2 py-1"
                                     >
-                                        {data.data.stock > 0
+                                        {stock > 0
                                             ? " In Stock"
                                             : "Out of Stock"}
                                     </Badge>
@@ -112,7 +117,7 @@ const SingleProduct = () => {
                                 ${data.data.price}
                             </div>
                             <div className="flex items-center gap-4 md:w-1/2">
-                                <Button onClick={addToCart} size="lg" className="w-full" disabled={data.data.stock <=0 }>Add to Cart</Button>
+                                <Button onClick={addToCart} size="lg" className="w-full" disabled={stock <= 0 }>Add to Cart</Button>
                             </div>
                         </div>
                     </div>
