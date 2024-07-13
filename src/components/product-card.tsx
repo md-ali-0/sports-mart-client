@@ -21,7 +21,7 @@ const ProductCard: FC<Product> = ({ product }) => {
                 alt={product.name}
                 width={400}
                 height={400}
-                className="w-full h-48 rounded-xl object-cover"
+                className="w-auto h-48 rounded-xl object-cover mx-auto"
             />
             <div className="py-2.5 px-2">
                 <h3 className="text-lg font-semibold mb-2 line-clamp-1">{product.name}</h3>

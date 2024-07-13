@@ -30,18 +30,14 @@ const SingleProduct = () => {
                     <div className="hidden md:flex items-start border rounded-lg">
                         <img
                             src={`${config.host}/${data.data.image}`}
-                            alt="Product Image"
-                            width={600}
-                            height={600}
-                            className="object-cover overflow-hidden h-96 w-auto mx-auto"
+                            alt={data.data.name}
+                            className="object-fill rounded-lg overflow-hidden h-96 w-auto mx-auto"
                         />
                     </div>
                     <div className="md:hidden">
                         <img
                             src={`${config.host}/${data.data.image}`}
-                            alt="Product Image"
-                            width={600}
-                            height={600}
+                            alt={data.data.name}
                             className="aspect-square object-cover border w-full rounded-lg overflow-hidden"
                         />
                     </div>
