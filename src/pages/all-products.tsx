@@ -23,7 +23,6 @@ import { toast } from "sonner";
 
 const AllProducts = () => {
     const [searchParams] = useSearchParams();
-
     const categoryParams = searchParams.get('category');
 
     const [searchTerm, setSearchTerm] = useState<string>("");
@@ -39,15 +38,15 @@ const AllProducts = () => {
 
     const query = {
         searchTerm,
-        limit: productsPerPage,
         sort,
-        page: currentPage,
         category,
         brand,
         rating,
+        minPrice,
+        maxPrice
     };
-    const { data, isError, isLoading, isSuccess, error } =
-        useGetAllProductsQuery(query, { pollingInterval: 30000 });
+
+    const { data, isError, isLoading, isSuccess, error } = useGetAllProductsQuery(query, { pollingInterval: 30000 });
 
     useEffect(() => {
         if (isError) {
@@ -63,11 +62,13 @@ const AllProducts = () => {
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
     };
+
     const handleFilterChange = (checked: boolean | string, value: string) => {
         if (checked) {
             setCategory(value);
         } else setCategory(undefined);
     };
+
     const handleBrandChange = (checked: boolean | string, value: string) => {
         if (checked) {
             setBrand(value);
@@ -101,10 +102,10 @@ const AllProducts = () => {
     };
 
     if (isLoading) {
-        return <Loading/>
+        return <Loading />;
     }
 
-    let filteredProducts = data?.data;
+    let filteredProducts = data?.data || [];
 
     if (minPrice !== undefined) {
         filteredProducts = filteredProducts.filter((product: IProduct) => product.price >= minPrice);
@@ -113,6 +114,10 @@ const AllProducts = () => {
     if (maxPrice !== undefined) {
         filteredProducts = filteredProducts.filter((product: IProduct) => product.price <= maxPrice);
     }
+
+    const indexOfLastProduct = currentPage * productsPerPage;
+    const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+    const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
 
     const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
 
@@ -197,7 +202,7 @@ const AllProducts = () => {
                 </div>
                 <div className="md:col-span-8 lg:col-span-9">
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                        {filteredProducts.map((product: IProduct) => (
+                        {currentProducts.map((product: IProduct) => (
                             <ProductCard key={product._id} product={product} />
                         ))}
                     </div>

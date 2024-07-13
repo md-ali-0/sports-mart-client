@@ -1,6 +1,7 @@
 import logo from "@/assets/images/logo.png";
 import { LuFacebook, LuInstagram } from "react-icons/lu";
 import { RiTwitterXFill } from "react-icons/ri";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
     return (
@@ -27,39 +28,26 @@ const Footer = () => {
                     </div>
                 </div>
                 <div>
+                    
+                </div>
+                <div>
                     <h3 className="font-semibold">PRODUCTS</h3>
                     <ul className="mt-4 space-y-2">
                         <li>
-                            <a
-                                href="#"
+                            <Link
+                                to={'/all-products'}
                                 className="text-gray-400 hover:text-white"
                             >
-                                Services
-                            </a>
+                                All Products
+                            </Link>
                         </li>
                         <li>
-                            <a
-                                href="#"
+                            <Link
+                                to={'/manage-products'}
                                 className="text-gray-400 hover:text-white"
                             >
-                                About Us
-                            </a>
-                        </li>
-                        <li>
-                            <a
-                                href="#"
-                                className="text-gray-400 hover:text-white"
-                            >
-                                News &amp; Stories
-                            </a>
-                        </li>
-                        <li>
-                            <a
-                                href="#"
-                                className="text-gray-400 hover:text-white"
-                            >
-                                Roadmap
-                            </a>
+                                Manage Product
+                            </Link>
                         </li>
                     </ul>
                 </div>
@@ -67,84 +55,76 @@ const Footer = () => {
                     <h3 className="font-semibold">IMPORTANT LINKS</h3>
                     <ul className="mt-4 space-y-2">
                         <li>
-                            <a
-                                href="#"
+                            <Link
+                                to={'/'}
                                 className="text-gray-400 hover:text-white"
                             >
-                                Our Journeys
-                            </a>
+                                Home
+                            </Link>
                         </li>
                         <li>
-                            <a
-                                href="#"
+                            <Link
+                                to={'/cart'}
                                 className="text-gray-400 hover:text-white"
                             >
-                                Pricing Plans
-                            </a>
+                                Cart
+                            </Link>
                         </li>
                         <li>
-                            <a
-                                href="#"
-                                className="text-gray-400 hover:text-white"
-                            >
-                                Roadmap
-                            </a>
-                        </li>
-                        <li>
-                            <a
-                                href="#"
-                                className="text-gray-400 hover:text-white"
-                            >
-                                Terms &amp; Conditions
-                            </a>
-                        </li>
-                        <li>
-                            <a
-                                href="#"
-                                className="text-gray-400 hover:text-white"
-                            >
-                                Privacy Policy
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 className="font-semibold">COMPANY</h3>
-                    <ul className="mt-4 space-y-2">
-                        <li>
-                            <a
-                                href="#"
+                            <Link
+                                to={'/about-us'}
                                 className="text-gray-400 hover:text-white"
                             >
                                 About Us
-                            </a>
+                            </Link>
                         </li>
                         <li>
-                            <a
-                                href="#"
+                            <Link
+                                to={'/'}
                                 className="text-gray-400 hover:text-white"
                             >
-                                Jobs
-                            </a>
-                        </li>
-                        <li>
-                            <a
-                                href="#"
-                                className="text-gray-400 hover:text-white"
-                            >
-                                Press
-                            </a>
-                        </li>
-                        <li>
-                            <a
-                                href="#"
-                                className="text-gray-400 hover:text-white"
-                            >
-                                Contact Us
-                            </a>
+                                Terms &amp; Conditions
+                            </Link>
                         </li>
                     </ul>
                 </div>
+                {/* <div>
+                    <h3 className="font-semibold">COMPANY</h3>
+                    <ul className="mt-4 space-y-2">
+                        <li>
+                            <Link
+                                to={'/'}
+                                className="text-gray-400 hover:text-white"
+                            >
+                                About Us
+                            </Link>
+                        </li>
+                        <li>
+                            <Link
+                                to={'/'}
+                                className="text-gray-400 hover:text-white"
+                            >
+                                Jobs
+                            </Link>
+                        </li>
+                        <li>
+                            <Link
+                                to={'/'}
+                                className="text-gray-400 hover:text-white"
+                            >
+                                Press
+                            </Link>
+                        </li>
+                        <li>
+                            <Link
+                                to={'/'}
+                                className="text-gray-400 hover:text-white"
+                            >
+                                Contact Us
+                            </Link>
+                        </li>
+                    </ul>
+                </div> */}
             </div>
             <div className="container mx-auto">
                 <div className="border-t border-slate-800 text-center text-gray-200 mt-5 pt-6">

@@ -7,9 +7,7 @@ import SkeletonProductCard from "./Skeleton-product-card";
 
 const FeaturedSection = () => {
     const query = {
-        limit: 4,
         sort: '-createdAt',
-        page: 1
     };
     const { data, isError, isLoading, isSuccess, error } = useGetAllProductsQuery(query);
 
@@ -38,7 +36,7 @@ const FeaturedSection = () => {
                         ? Array.from({ length: 4 }).map((_, index) => (
                             <SkeletonProductCard key={index} />
                           ))
-                        : data.data.map((product: IProduct) => (
+                        : data.data.slice(0,4).map((product: IProduct) => (
                             <ProductCard key={product._id} product={product} />
                           ))
                     }

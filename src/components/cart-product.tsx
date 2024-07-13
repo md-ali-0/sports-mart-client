@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import config from "@/config";
 import {
     decrementQuantity,
     CartProduct as ICartProduct,
@@ -68,12 +67,12 @@ const CartProduct: FC<CartProductProps> = ({ product }) => {
                 <a href="#" className="shrink-0 md:order-1">
                     <img
                         className="object-cover w-20 dark:hidden"
-                        src={`${config.host}/${product.image}`}
+                        src={product.image}
                         alt={product.name}
                     />
                     <img
                         className="hidden object-cover w-20 dark:block"
-                        src={`${config.host}/${product.image}`}
+                        src={product.image}
                         alt={product.name}
                     />
                 </a>

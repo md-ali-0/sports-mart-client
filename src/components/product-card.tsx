@@ -2,7 +2,6 @@
 //     Rating,
 //     Star
 // } from "@smastrom/react-rating";
-import config from "@/config";
 import { IProduct } from "@/interface/IProduct";
 import { FC } from "react";
 import { LuStar } from "react-icons/lu";
@@ -17,7 +16,7 @@ const ProductCard: FC<Product> = ({ product }) => {
     return (
         <div className="rounded-lg overflow-hidden border p-2.5">
             <img
-                src={`${config.host}/${product.image}`}
+                src={product.image}
                 alt={product.name}
                 width={400}
                 height={400}

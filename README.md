@@ -30,6 +30,7 @@ SportsMart is a comprehensive e-commerce website offering a wide range of sporti
 
 -   React
 -   Redux Toolkit (RTK Query)
+-   Cloudinary (Image Hosting)
 -   Tailwind CSS
 -   React Hook Form
 -   React Router
