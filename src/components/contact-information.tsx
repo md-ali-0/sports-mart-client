@@ -1,3 +1,5 @@
+import { Mail, MapPin, Phone } from 'lucide-react';
+
 const ContactInformation = () => {
     return (
         <section className="w-full py-12 md:py-24 lg:py-32">
@@ -15,13 +17,26 @@ const ContactInformation = () => {
                             questions, feedback, or need assistance, please
                             reach out to us at:
                         </p>
-                        <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                            Email: support@sportsmart.com
-                            <br />
-                            Phone: +1 (800) 123-4567
-                            <br />
-                            Address: 123 Sports Mart Lane, Sportstown, USA
-                        </p>
+                        <div className="flex flex-col items-center space-y-6">
+                            <div className="flex items-center space-x-4">
+                                <Mail className="text-muted-foreground" size={24} />
+                                <p className="text-lg md:text-xl text-muted-foreground">
+                                    Email: support@sportsmart.com
+                                </p>
+                            </div>
+                            <div className="flex items-center space-x-4">
+                                <Phone className="text-muted-foreground" size={24} />
+                                <p className="text-lg md:text-xl text-muted-foreground">
+                                    Phone: +1 (800) 123-4567
+                                </p>
+                            </div>
+                            <div className="flex items-center space-x-4">
+                                <MapPin className="text-muted-foreground" size={24} />
+                                <p className="text-lg md:text-xl text-muted-foreground">
+                                    Address: 123 Sports Mart Lane, Sportstown, USA
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

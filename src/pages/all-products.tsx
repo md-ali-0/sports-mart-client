@@ -44,7 +44,7 @@ const AllProducts = () => {
         rating,
     };
     const { data, isError, isLoading, isSuccess, error } =
-        useGetAllProductsQuery(query);
+        useGetAllProductsQuery(query, { pollingInterval: 30000 });
 
     useEffect(() => {
         if (isError) {
